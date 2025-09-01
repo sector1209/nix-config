@@ -1,0 +1,11 @@
+exclude: "\\.patch$"
+repos:
+    - repo: https://github.com/NixOS/nixfmt
+      rev: 2caa09642c3cde5985cf8d239ffc66094c344c57
+      hooks:
+            - id: nixfmt-nix
+    - repo: https://github.com/scop/pre-commit-shfmt
+      rev: v3.12.0-2
+      hooks:
+        - id: shfmt
+          args: [--write, --simplify, --indent=2, --case-indent, --space-redirects]

@@ -1,0 +1,7 @@
+#flake.lock
+result
+**/result
+result/*
+core
+core/
+rebuild.log
