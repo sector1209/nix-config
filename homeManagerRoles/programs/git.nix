@@ -7,7 +7,7 @@
 }:
 {
 
-  sops.secrets."keys/nixos-configs-repo-key" = {
+  sops.secrets."keys/nix-config-repo-key" = {
     mode = "0600";
   };
   sops.secrets."keys/composes-repo-key" = {
@@ -42,7 +42,7 @@
         hostname = "github.com";
         user = "git";
         identityFile = [
-          config.sops.secrets."keys/nixos-configs-repo-key".path
+          config.sops.secrets."keys/nix-config-repo-key".path
         ];
         extraOptions = {
           "PreferredAuthentications" = "publickey";

@@ -16,7 +16,7 @@
 
     environment.shellAliases = {
       l = "ls -lah";
-      cdnixdir = "cd /nixos-configs";
+      cdnixdir = "cd /nix-config";
     };
 
   };

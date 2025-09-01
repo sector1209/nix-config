@@ -61,7 +61,7 @@ while [[ $OPTIND -le $# ]]; do
   fi
 done
 
-pushd /nixos-configs &> /dev/null
+pushd /nix-config &> /dev/null
 
 if [[ $(id -u) != 0 ]]; then
   popd &> /dev/null
