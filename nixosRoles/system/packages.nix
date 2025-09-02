@@ -39,5 +39,11 @@
       defaultEditor = lib.mkForce true;
     };
 
+    programs.tmux = {
+      enable = true;
+      # Remove grey highlighting from comments when using neovim inside tmux
+      extraConfig = "set -ga terminal-overrides \",xterm-256color:Tc\"\nset-option -g set-clipboard on";
+    };
+
   };
 }

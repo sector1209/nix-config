@@ -59,6 +59,7 @@
         };
 
       };
+      extraConfigLua = "vim.g.clipboard = 'osc52'\nvim.o.clipboard = 'unnamedplus'";
     };
   };
 }

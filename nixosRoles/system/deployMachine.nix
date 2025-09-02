@@ -23,6 +23,7 @@
       custom.nix-output-monitor
       custom.rebuild
       custom.rebuild-remote
+      gcc # Needed for deadnix pre-commit plugin
     ];
 
   };
