@@ -53,13 +53,9 @@
       ...
     }@inputs:
     let
-      #      inherit (self) outputs;
-      #    pkgs = nixpkgs.legacyPackages.${system};
 
       helpers = import ./flakeHelpers.nix inputs self;
       inherit (helpers) mkMerge mkNixos;
-
-      #      inherit self;
 
     in
 
