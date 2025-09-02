@@ -1,7 +1,6 @@
 # custom module for nvf
 
 {
-  pkgs,
   lib,
   config,
   inputs,

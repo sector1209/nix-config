@@ -1,11 +1,6 @@
 # configuration for nixos-testing
 
 {
-  modulesPath,
-  config,
-  pkgs,
-  inputs,
-  outputs,
   ...
 }:
 let

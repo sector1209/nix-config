@@ -1,9 +1,7 @@
 # configuration for edgeware
 
 {
-  modulesPath,
   config,
-  pkgs,
   lib,
   ...
 }:

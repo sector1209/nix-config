@@ -1,7 +1,6 @@
 # custom module for user configuration
 
 {
-  pkgs,
   lib,
   config,
   ...

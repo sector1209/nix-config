@@ -1,7 +1,6 @@
 # custom module to for auto-update settings
 
 {
-  pkgs,
   lib,
   config,
   ...

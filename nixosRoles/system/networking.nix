@@ -1,7 +1,6 @@
 # custom module for networking
 
 {
-  pkgs,
   lib,
   config,
   ...

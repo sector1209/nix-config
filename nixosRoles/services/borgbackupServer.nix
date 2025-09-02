@@ -1,10 +1,8 @@
 # custom module for borgbackup
 
 {
-  pkgs,
   lib,
   config,
-  inputs,
   ...
 }:
 let

@@ -1,12 +1,8 @@
 # custom module for immich
 
 {
-  pkgs,
   lib,
   config,
-  modulesPath,
-  inputs,
-  outputs,
   ...
 }:
 {

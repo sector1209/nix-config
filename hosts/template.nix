@@ -1,7 +1,4 @@
 {
-  modulesPath,
-  config,
-  pkgs,
   ...
 }:
 let

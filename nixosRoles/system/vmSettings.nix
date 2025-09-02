@@ -1,9 +1,7 @@
 {
   config,
-  pkgs,
   modulesPath,
   lib,
-  system,
   ...
 }:
 

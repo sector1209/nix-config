@@ -1,6 +1,5 @@
 # custom module with localisation and timezone settings
 {
-  pkgs,
   lib,
   config,
   ...

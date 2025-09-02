@@ -1,12 +1,8 @@
 # custom module for Proxmox containers
 
 {
-  pkgs,
   lib,
   config,
-  modulesPath,
-  inputs,
-  outputs,
   ...
 }:
 {

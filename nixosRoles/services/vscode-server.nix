@@ -1,7 +1,6 @@
 # Role module for vscode-server
 
 {
-  pkgs,
   lib,
   config,
   inputs,

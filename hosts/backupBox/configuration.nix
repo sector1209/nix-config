@@ -1,15 +1,11 @@
 # configuration for charlie
 
 {
-  modulesPath,
-  config,
-  pkgs,
   ...
 }:
 let
 
   hostname = "backupBox";
-  user = "dan";
 
 in
 {

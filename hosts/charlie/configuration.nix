@@ -1,9 +1,6 @@
 # configuration for charlie
 
 {
-  modulesPath,
-  config,
-  pkgs,
   ...
 }:
 let

@@ -1,16 +1,8 @@
 # configuration for dennis
 
 {
-  modulesPath,
-  config,
-  pkgs,
-  inputs,
-  outputs,
   ...
 }:
-let
-
-in
 {
 
   # Bind mount media dirs to /export/
