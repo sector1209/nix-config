@@ -4,6 +4,12 @@
   lib,
   ...
 }:
+let
+
+  helpers = import ./rolesHelpers.nix lib;
+  inherit (helpers) mkDefaultRoles;
+
+in
 {
 
   imports = [
@@ -12,45 +18,24 @@
     ./options
   ];
 
-  roles = {
-
-    sops.enable = lib.mkDefault true;
-
-    flakeSettings.enable = lib.mkDefault true;
-
-    updateSettings.enable = lib.mkDefault true;
-
-    localisation.enable = lib.mkDefault true;
-
-    packages.enable = lib.mkDefault true;
-
-    networking.enable = lib.mkDefault true;
-
-    users.enable = lib.mkDefault true;
-
-    aliases.enable = lib.mkDefault true;
-
-    fonts.enable = lib.mkDefault true;
-
-    #  nvf.enable =
-    #    lib.mkDefault true;
-
-    # Disabled as causing nodejs_18 issues with nixpkgs 25.05
-    nixvim.enable = lib.mkDefault true;
-
-    fish.enable = lib.mkDefault true;
-
-    ssh.enable = lib.mkDefault true;
-
-    tailscale.enable = lib.mkDefault true;
-
-    deployUser.enable = lib.mkDefault true;
-
-    prometheus-exporter.enable = lib.mkDefault true;
-
-    promtail.enable = lib.mkDefault true;
-
-  };
+  roles = mkDefaultRoles [
+    "sops"
+    "flakeSettings"
+    "updateSettings"
+    "localisation"
+    "packages"
+    "networking"
+    "users"
+    "aliases"
+    "fonts"
+    "nixvim"
+    "fish"
+    "ssh"
+    "tailscale"
+    "deployUser"
+    "prometheus-exporter"
+    "promtail"
+  ];
 
   documentation.nixos.enable = true;
 
