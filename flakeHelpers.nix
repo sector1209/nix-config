@@ -45,7 +45,6 @@ in
       modules = [
         ./hosts/${machineHostname}/configuration.nix
         ./nixosRoles/default.nix
-        #	./nixosRoles/modulesHelper.nix
         #	(homeManagerCfg false [ ])
       ]
       ++ extraModules
