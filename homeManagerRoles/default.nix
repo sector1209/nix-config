@@ -1,10 +1,6 @@
 # default  that pulls in all other home-manager config
 
 {
-  inputs,
-  lib,
-  config,
-  pkgs,
   ...
 }:
 {

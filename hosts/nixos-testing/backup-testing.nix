@@ -1,18 +1,9 @@
 # configuration for nixos-testing
 
 {
-  modulesPath,
   config,
-  pkgs,
-  inputs,
-  outputs,
   ...
 }:
-let
-
-  borg-job = "test";
-
-in
 {
 
   sops.secrets = {

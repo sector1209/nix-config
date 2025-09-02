@@ -1,7 +1,6 @@
 # custom module for funcTest service
 
 {
-  pkgs,
   lib,
   config,
   ...

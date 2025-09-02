@@ -1,9 +1,6 @@
 # configuration for technitium-dns
 
 {
-  modulesPath,
-  config,
-  pkgs,
   ...
 }:
 let

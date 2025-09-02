@@ -1,12 +1,8 @@
 # custom module for gotify
 
 {
-  pkgs,
   lib,
   config,
-  modulesPath,
-  inputs,
-  outputs,
   ...
 }:
 {

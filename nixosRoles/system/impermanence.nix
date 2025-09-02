@@ -1,7 +1,6 @@
 # custom module for nixos impermanence for a btrfs formatted system
 
 {
-  pkgs,
   lib,
   config,
   inputs,

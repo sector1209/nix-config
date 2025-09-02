@@ -1,10 +1,6 @@
 # configuration for metrics monitoring proxmox container
 
 {
-  modulesPath,
-  config,
-  pkgs,
-  lib,
   ...
 }:
 let

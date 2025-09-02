@@ -1,10 +1,8 @@
 # Role module for X
 
 {
-  pkgs,
   lib,
   config,
-  inputs,
   ...
 }:
 let

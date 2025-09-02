@@ -1,11 +1,6 @@
 # configuration for dennis
 
 {
-  modulesPath,
-  config,
-  pkgs,
-  inputs,
-  outputs,
   ...
 }:
 let

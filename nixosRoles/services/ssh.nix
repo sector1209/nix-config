@@ -1,7 +1,6 @@
 # custom module for ssh
 
 {
-  pkgs,
   lib,
   config,
   ...

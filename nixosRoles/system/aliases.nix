@@ -1,7 +1,6 @@
 # custom module for global alias configuration
 
 {
-  pkgs,
   lib,
   config,
   ...

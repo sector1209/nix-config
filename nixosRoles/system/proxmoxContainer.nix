@@ -1,12 +1,9 @@
 # custom module for proxmox containers
 
 {
-  pkgs,
   lib,
   config,
   modulesPath,
-  inputs,
-  outputs,
   ...
 }:
 {

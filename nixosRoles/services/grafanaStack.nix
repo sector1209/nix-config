@@ -52,8 +52,6 @@ let
   autogenScrapeConfigs = flatten (map attrValues (attrValues scrapeConfigsByHost));
 
   lokiPort = 3100;
-  prometheusPort = 9090;
-  prometheusNodePort = 9100;
 
 in
 {

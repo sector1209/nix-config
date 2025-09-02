@@ -1,17 +1,11 @@
 # configuration for spiros
 
 {
-  modulesPath,
-  config,
-  pkgs,
-  inputs,
-  outputs,
   ...
 }:
 let
 
   hostname = "spiros";
-  user = "dan";
 
 in
 {

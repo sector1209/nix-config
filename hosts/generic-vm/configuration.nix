@@ -1,10 +1,6 @@
 # configuration for nginx
 
 {
-  modulesPath,
-  config,
-  pkgs,
-  lib,
   inputs,
   ...
 }:

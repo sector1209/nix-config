@@ -1,7 +1,6 @@
 # modules for glances service
 
 {
-  pkgs,
   lib,
   config,
   ...

@@ -1,17 +1,9 @@
 # Default module that imports all custom modules
 
 {
-  modulesPath,
-  config,
-  pkgs,
-  inputs,
-  outputs,
   lib,
   ...
 }:
-let
-
-in
 {
 
   imports = [

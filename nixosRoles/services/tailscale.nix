@@ -1,12 +1,8 @@
 # custom module for Tailscale service
 
 {
-  pkgs,
   lib,
   config,
-  modulesPath,
-  inputs,
-  outputs,
   ...
 }:
 {

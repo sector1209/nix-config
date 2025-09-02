@@ -1,11 +1,8 @@
 # nginx custom module
 
 {
-  pkgs,
   lib,
   config,
-  inputs,
-  outputs,
   ...
 }:
 {

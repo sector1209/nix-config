@@ -1,7 +1,6 @@
 # custom module for nixvim
 
 {
-  pkgs,
   lib,
   config,
   inputs,
