@@ -23,7 +23,7 @@ in
 
     deployMachine.enable = true;
 
-    flakeAutoUpdateSvr.enable = true;
+    flakeLockAutoUpdate.enable = true;
 
     services.beszel-agent.enable = true;
 
