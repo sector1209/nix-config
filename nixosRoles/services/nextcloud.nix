@@ -10,7 +10,6 @@ let
   nc-db-backup-dir = "/tmp/nextcloud-database-backup";
 in
 {
-  # ADD NEXTCLOUD-DATABASE-BACKUP-DIR AS A VARIABLE
 
   options = {
     roles.nextcloud.enable = lib.mkEnableOption "enables nextcloud module";
