@@ -42,8 +42,11 @@ in
             exit 1
           fi
 
-          # Stash changes on working branch
-          git stash push --include-untracked -m "temp automatic flake.lock update stash"
+          # Check for uncomitted changes on working branch
+          CHANGES=$(git status --porcelain)
+
+          # Stash changes on working branch (if there are any)
+          [ -n "$CHANGES" ] && git stash push --include-untracked -m "temp automatic flake.lock update stash"
 
           # Switch to the "flake-lock-update" branch
           git checkout flake-lock-update
@@ -60,7 +63,8 @@ in
           git checkout "$CURRENT_BRANCH"
           echo "Switched back to branch: $CURRENT_BRANCH"
 
-          git stash pop --index
+          # Restore the working directory changes
+          [ -n "$CHANGES" ] && git stash pop --index
         ''}";
       };
     };
