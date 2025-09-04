@@ -6,6 +6,9 @@
   config,
   ...
 }:
+let
+  nc-db-backup-dir = "/tmp/nextcloud-database-backup";
+in
 {
   # ADD NEXTCLOUD-DATABASE-BACKUP-DIR AS A VARIABLE
 
@@ -32,15 +35,20 @@
       repo = "borg@backupbox:.";
       paths = [
         "${config.services.nextcloud.home}"
-        "/home/dan/nextcloud-database-backup"
+        "${nc-db-backup-dir}"
       ];
       passPath = "${config.sops.secrets."borg/nextcloud-pass".path}";
       keyPath = "${config.sops.secrets."borg/nextcloud-priv".path}";
       preHook = ''
+        ${pkgs.coreutils}/bin/mkdir ${nc-db-backup-dir}
+        ${pkgs.coreutils}/bin/chown nextcloud:nextcloud ${nc-db-backup-dir}
         ${config.services.nextcloud.occ}/bin/nextcloud-occ maintenance:mode --on
-        /run/wrappers/bin/sudo -u nextcloud /run/current-system/sw/bin/mysqldump --single-transaction -u nextcloud nextcloud > /home/dan/nextcloud-database-backup/nextcloud-sqlbkp_$(date +'%Y%m%d').bak
-      ''; # Should probably replace sudo and mysqldump commands with something more nixy https://discourse.nixos.org/t/get-executable-path-of-pkgs-writescriptbin-nextcloud-occ/32339
-      postHook = "${config.services.nextcloud.occ}/bin/nextcloud-occ maintenance:mode --off";
+        /run/wrappers/bin/sudo -u nextcloud ${pkgs.mariadb}/bin/mysqldump --single-transaction -u nextcloud nextcloud > ${nc-db-backup-dir}/nextcloud-sqlbkp_$(date +'%Y%m%d').bak
+      '';
+      postHook = ''
+        ${config.services.nextcloud.occ}/bin/nextcloud-occ maintenance:mode --off
+        ${pkgs.coreutils}/bin/rm -rf ${nc-db-backup-dir}
+      '';
     };
 
     # Configure nginx
