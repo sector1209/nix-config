@@ -50,6 +50,36 @@ in
       '';
     };
 
+    # Promtail exporter for nextcloud logs
+    services.promtail = {
+      configuration = {
+        scrape_configs = [
+          {
+            job_name = "system";
+            static_configs = [
+              {
+                targets = [ "localhost" ];
+                labels = {
+                  instance = "nc.danmail.me";
+                  job = "nextcloud";
+                  __path__ = "/var/lib/nextcloud/data/nextcloud.log";
+                };
+              }
+            ];
+            relabel_configs = [
+              {
+                target_label = "host";
+                replacement = "${config.networking.hostName}";
+              }
+            ];
+          }
+        ];
+      };
+    };
+
+    # Allow Promtail user to access nextcloud logs
+    users.users.promtail.extraGroups = [ "nextcloud" ];
+
     # Configure nginx
     services.nginx.virtualHosts = {
       "nc.danmail.me" = {
