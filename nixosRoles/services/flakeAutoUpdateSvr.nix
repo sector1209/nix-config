@@ -64,7 +64,7 @@ in
           echo "Switched back to branch: $CURRENT_BRANCH"
 
           # Restore the working directory changes
-          [ -n "$CHANGES" ] && git stash pop --index
+          [ -n "$CHANGES" ] && git stash pop --index || exit 0
         ''}";
       };
     };
