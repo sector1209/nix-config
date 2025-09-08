@@ -5,3 +5,4 @@ result/*
 core
 core/
 rebuild.log
+.zed/*

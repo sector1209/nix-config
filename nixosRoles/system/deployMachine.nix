@@ -24,6 +24,7 @@
       custom.rebuild
       custom.rebuild-remote
       gcc # Needed for deadnix pre-commit plugin
+      nixd
     ];
 
   };
