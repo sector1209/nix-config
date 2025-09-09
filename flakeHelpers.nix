@@ -40,12 +40,10 @@ in
       system = "x86_64-linux";
       specialArgs = {
         inherit inputs self;
-        #	vars = import ./machines/nixos/vars.nix;
       };
       modules = [
         ./hosts/${machineHostname}/configuration.nix
         ./nixosRoles/default.nix
-        #	(homeManagerCfg false [ ])
       ]
       ++ extraModules
       ++ nixpkgsVersion.lib.optionals (
