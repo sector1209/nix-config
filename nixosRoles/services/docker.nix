@@ -2,6 +2,7 @@
 
 {
   lib,
+  pkgs,
   config,
   ...
 }:
@@ -24,6 +25,10 @@
       passPath = "${config.sops.secrets."borg/diskyDocker-pass".path}";
       keyPath = "${config.sops.secrets."borg/diskyDocker-priv".path}";
     };
+
+    environment.systemPackages = [
+      pkgs.docker-compose-language-service
+    ];
 
     users.users.dan = {
       extraGroups = [ "docker" ];
