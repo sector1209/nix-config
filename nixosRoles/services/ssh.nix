@@ -20,7 +20,7 @@
       enable = true;
       openFirewall = true;
       settings = {
-        # PasswordAuthentication = false;
+        PasswordAuthentication = false;
         PermitRootLogin = "prohibit-password"; # see below
         UseDns = true; # trying to solve dennis' ssh woes
         StrictModes = false; # see above

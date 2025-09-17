@@ -22,6 +22,7 @@
     ./updateSettings.nix
     ./users.nix
     ./vmSettings.nix
+    ./wazuh-agent.nix
     ./zsh.nix
   ];
 

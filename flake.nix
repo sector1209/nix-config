@@ -45,6 +45,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    wazuh-agent = {
+      url = "github:paulvictor/wazuh.nix";
+    };
+
   };
 
   outputs =
