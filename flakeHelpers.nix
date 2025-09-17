@@ -29,6 +29,9 @@ let
           };
         })
         (import ./packages)
+        (self: super: {
+          wazuh-agent = inputs.wazuh-agent.packages.x86_64-linux.wazuh-agent;
+        })
       ];
     }
   ];
