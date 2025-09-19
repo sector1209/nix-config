@@ -34,12 +34,6 @@ in
       };
     };
 
-    # Enable passwordless sudo.
-    security.sudo.wheelNeedsPassword = lib.mkDefault false;
-
-    # Add user to 'trusted-users' group to make remote builds work (https://nixos.wiki/wiki/Nixos-rebuild)
-    nix.settings.trusted-users = [ user ];
-
   };
 
 }

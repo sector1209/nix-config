@@ -27,14 +27,11 @@
 
     boot.growPartition = lib.mkDefault true;
 
-    #    # Allow remote updates with flakes and non-root users
+    # Allow remote updates with flakes and non-root users
     nix.settings.trusted-users = [
       "root"
       "@wheel"
     ];
-
-    # Don't ask for passwords
-    #    security.sudo.wheelNeedsPassword = false;
 
     programs.ssh.startAgent = true;
 
