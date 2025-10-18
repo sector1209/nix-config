@@ -123,10 +123,6 @@ in
         loglevel = 1;
       };
 
-      nginx = {
-        recommendedHttpHeaders = true;
-      };
-
       config = {
         dbtype = "mysql"; # Actually installs mariadb behind the scenes
         dbuser = "nextcloud";
