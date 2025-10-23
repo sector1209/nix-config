@@ -20,9 +20,11 @@
   # Enable and configure git
   programs.git = {
     enable = true;
-    userName = "Sector1209";
-    userEmail = "gh@danmail.me";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Sector1209";
+        email = "gh@danmail.me";
+      };
       pull = {
         rebase = true;
       };
