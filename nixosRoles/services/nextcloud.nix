@@ -102,7 +102,7 @@ in
       hostName = "nc.danmail.me";
 
       # Need to manually increment with every major upgrade.
-      package = pkgs.nextcloud31;
+      package = pkgs.nextcloud32;
 
       https = true;
       maxUploadSize = "100G"; # increase max upload size to avoid problems uploading videos
