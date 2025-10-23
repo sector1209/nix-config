@@ -31,6 +31,7 @@
           "flakes"
         ];
         auto-optimise-store = true;
+        download-buffer-size = 500000000; # 500 MB
       };
     };
   };
