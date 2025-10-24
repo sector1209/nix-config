@@ -71,28 +71,22 @@
         inputs.home-manager-unstable.nixosModules.home-manager
       ])
       (mkNixos "technitium-dns" inputs.nixpkgs [
-        inputs.home-manager.nixosModules.home-manager
       ])
       (mkNixos "dennis" inputs.nixpkgs [
-        inputs.home-manager.nixosModules.home-manager
+        inputs.home-manager-unstable.nixosModules.home-manager
       ])
       (mkNixos "charlie" inputs.nixpkgs-unstable [
         inputs.home-manager-unstable.nixosModules.home-manager
       ])
       (mkNixos "backupBox" inputs.nixpkgs [
-        inputs.home-manager.nixosModules.home-manager
       ])
       (mkNixos "metrics" inputs.nixpkgs [
-        inputs.home-manager.nixosModules.home-manager
       ])
       (mkNixos "mac" inputs.nixpkgs [
-        inputs.disko.nixosModules.default
       ])
       (mkNixos "edgeware" inputs.nixpkgs [
-        inputs.disko.nixosModules.default
       ])
       (mkNixos "spiros" inputs.nixpkgs [
-        inputs.home-manager.nixosModules.default
         inputs.disko.nixosModules.default
       ])
       #      (mkNixos "generic-vm" inputs.nixpkgs [
