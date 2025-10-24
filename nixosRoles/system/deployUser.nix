@@ -47,6 +47,17 @@ in
     security.sudo.wheelNeedsPassword = lib.mkForce true;
 
     # Allow sudo access without password for the deploy user
+    security.sudo.extraRules = [
+      {
+        users = [ "deploy" ];
+        commands = [
+          {
+            command = "ALL";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
     #    security.sudo.extraRules = [{
     #      users = [ "deploy" ];
     #      commands = [{
