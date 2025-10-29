@@ -71,9 +71,6 @@
       # use_backend darwin_backend if test_filter || cal_filter
         use_backend davis_backend if cal_filter
 
-      #  backend darwin_backend
-      #    server darwin darwin:443 send-proxy-v2
-
         backend davis_backend
           server mac mac:443 send-proxy-v2
 
@@ -82,39 +79,24 @@
           bind *:25566
           mode tcp
 
-      #  acl dst_ip_arm dst_port 25566
         acl dst_ip_darm dst_port 25566
-        acl dst_ip_cobbledos dst_port 25565
-
-      #  use_backend arm_backend if dst_ip_arm
-      #  server arm_mc_svr minemando-svr:25565
+        acl dst_ip_firelink dst_port 25565
 
         use_backend darm_backend if dst_ip_darm
-      #  server darm_mc_svr darm-svr:25565
 
-      #  use_backend cobbledos_backend if dst_ip_cobbledos
-      #  server cobbledos_mc_svr cobbledos_svr:25565
-
-
-      #  tcp-request inpect-delay 5s
-      #  tcp-request content accept if { req.ssl_hello_type 1 }
+        use_backend firelink_backend if dst_ip_firelink
 
       #  default_backend mc_backend
-
-      #  backend arm_backend
-      #    mode tcp
-      #    option tcp-check
-      #    server minemando_svr minemando-svr:25565
 
         backend darm_backend
           mode tcp
           option tcp-check
           server darm_mc_svr darm-svr:25565
 
-      #  backend cobbledos_backend
-      #    mode tcp
-      #    option tcp-check
-      #    server cobbledos_svr cobbledos-svr:25565 
+        backend firelink_backend
+          mode tcp
+          option tcp-check
+          server firelink_svr firelink-svr:25565
     '';
   };
 

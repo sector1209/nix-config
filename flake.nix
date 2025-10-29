@@ -83,8 +83,10 @@
       (mkNixos "metrics" inputs.nixpkgs [
       ])
       (mkNixos "mac" inputs.nixpkgs [
+        inputs.disko.nixosModules.default
       ])
       (mkNixos "edgeware" inputs.nixpkgs [
+        inputs.disko.nixosModules.default
       ])
       (mkNixos "spiros" inputs.nixpkgs [
         inputs.disko.nixosModules.default
