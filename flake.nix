@@ -4,12 +4,12 @@
 
   inputs = {
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Home manager
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -21,12 +21,13 @@
     # Sops-nix
     sops-nix.url = "github:Mic92/sops-nix";
 
-    # nixvim
+    # Nixvim
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-25.05";
+      url = "github:nix-community/nixvim/nixos-25.11";
       #      inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Disko
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -73,7 +74,7 @@
       (mkNixos "technitium-dns" inputs.nixpkgs [
       ])
       (mkNixos "dennis" inputs.nixpkgs [
-        inputs.home-manager-unstable.nixosModules.home-manager
+        inputs.home-manager.nixosModules.home-manager
       ])
       (mkNixos "charlie" inputs.nixpkgs-unstable [
         inputs.home-manager-unstable.nixosModules.home-manager
