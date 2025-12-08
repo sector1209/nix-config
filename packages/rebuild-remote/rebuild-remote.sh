@@ -143,6 +143,7 @@ do_many() {
     if should_ignore "$host"; then
       info "Skipping ignored host: $host"
     else
+      echo
       info "Rebuilding host: $host"
       do_rebuild "$host"
     fi
