@@ -50,4 +50,25 @@
     };
   };
 
+  # Systemd service to pull changes
+  systemd.services.pull-blog-changes = {
+    enable = true;
+    startAt = "daily";
+    path = [
+      pkgs.coreutils
+      pkgs.git
+      pkgs.openssh
+    ];
+    serviceConfig = {
+      User = "dan";
+      ExecStart = "/run/current-system/sw/bin/sh ${pkgs.writeShellScript "pull-blog-changes" ''
+        # Change directory
+        cd /var/lib/www/hugo-website
+
+        # Pull any changes from remote repo
+        git pull
+      ''}";
+    };
+  };
+
 }
