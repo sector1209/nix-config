@@ -40,11 +40,10 @@
     };
   };
 
+  # New Caddy config
   services.caddy = {
     enable = true;
-    configFile = pkgs.writeText "Caddyfile" ''
-            # global
-            {
+    globalConfig = ''
       	servers :443 {
       	  name proxied_https
       	  listener_wrappers {
@@ -53,40 +52,36 @@
       	      allow 100.0.0.0/8
       	    }
       	  tls
-      	  }
+         }
       	}
-
-      	admin 127.0.0.1:2020
-
-      	log default {
-      	  output stdout
-      	  level INFO
-      	}
-            }
-
-            cal.danmail.me:443 {
-      	redir /.well-known/carddav /dav/ 301
-      	redir /.well-known/caldav /dav/ 301
-      	log {
-      	  output stdout
-      	  level INFO
-      	}
-      	tls /var/lib/acme/cal.danmail.me/cert.pem /var/lib/acme/cal.danmail.me/key.pem
-      	@blocked {
-      	  not remote_ip private_ranges 100.0.0.0/8
-      	  path /login /dashboard
-      	}
-      	respond @blocked 403
-      	#log {
-      	#output file /var/log/davis/access.log
-      	#  format transform "{common_log}" {
-      	#    time_local
-      	#  }
-              #}
-      	reverse_proxy localhost:9000
-            }
+      	# log default {
+      	#   output stdout
+      	#   level INFO
+      	# }
     '';
-
+    virtualHosts."cal.danmail.me" = {
+      extraConfig = ''
+        	redir /.well-known/carddav /dav/ 301
+        	redir /.well-known/caldav /dav/ 301
+        	log {
+        	  output stdout
+        	  level INFO
+        	}
+        	tls /var/lib/acme/cal.danmail.me/cert.pem /var/lib/acme/cal.danmail.me/key.pem
+        	@blocked {
+        	  not remote_ip private_ranges 100.0.0.0/8
+        	  path /login /dashboard
+        	}
+        	respond @blocked 403
+        	#log {
+        	#output file /var/log/davis/access.log
+        	#  format transform "{common_log}" {
+        	#    time_local
+        	#  }
+         #}
+        	reverse_proxy localhost:9000
+      '';
+    };
   };
 
   # Define directories to persist between reboots
@@ -162,7 +157,7 @@
       chmod 4755 /run/wrappers/bin/newuidmap
       chown root:root /run/wrappers/bin/newuidmap
 
-      cp ${pkgs.shadow}/bin/newgidmap /run/wrappers/bin/newgidmap  
+      cp ${pkgs.shadow}/bin/newgidmap /run/wrappers/bin/newgidmap
       chmod 4755 /run/wrappers/bin/newgidmap
       chown root:root /run/wrappers/bin/newgidmap
 

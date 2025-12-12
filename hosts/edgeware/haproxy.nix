@@ -77,7 +77,7 @@
           server mac mac:443 send-proxy-v2
 
         backend blog_backend
-          server nixos-testing nixos-testing:443
+          server mac mac:443
 
         frontend mc_listen
           bind *:25565

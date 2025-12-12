@@ -85,6 +85,7 @@
       ])
       (mkNixos "mac" inputs.nixpkgs [
         inputs.disko.nixosModules.default
+        inputs.home-manager.nixosModules.home-manager
       ])
       (mkNixos "edgeware" inputs.nixpkgs [
         inputs.disko.nixosModules.default

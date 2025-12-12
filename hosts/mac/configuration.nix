@@ -11,6 +11,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ./podman-compose.nix
+    ./blog.nix
   ];
 
   networking.hostName = hostname;
