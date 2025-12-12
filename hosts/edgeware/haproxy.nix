@@ -68,30 +68,35 @@
 
         acl test_filter req_ssl_sni -i test.danmail.me
         acl cal_filter req_ssl_sni -i cal.danmail.me
+        acl blog_filter req_ssl_sni -i blog.danmail.me
       # use_backend darwin_backend if test_filter || cal_filter
         use_backend davis_backend if cal_filter
+        use_backend blog_backend if blog_filter
 
         backend davis_backend
           server mac mac:443 send-proxy-v2
+
+        backend blog_backend
+          server nixos-testing nixos-testing:443
 
         frontend mc_listen
           bind *:25565
           bind *:25566
           mode tcp
 
-        acl dst_ip_darm dst_port 25566
+        #acl dst_ip_darm dst_port 25566
         acl dst_ip_firelink dst_port 25565
 
-        use_backend darm_backend if dst_ip_darm
+        #use_backend darm_backend if dst_ip_darm
 
         use_backend firelink_backend if dst_ip_firelink
 
       #  default_backend mc_backend
 
-        backend darm_backend
-          mode tcp
-          option tcp-check
-          server darm_mc_svr darm-svr:25565
+        #backend darm_backend
+        #  mode tcp
+        #  option tcp-check
+        #  server darm_mc_svr darm-svr:25565
 
         backend firelink_backend
           mode tcp

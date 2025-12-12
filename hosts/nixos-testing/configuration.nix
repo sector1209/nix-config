@@ -13,6 +13,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ./backup-testing.nix
+    ./static-site-testing.nix
   ];
 
   networking.hostName = hostname;

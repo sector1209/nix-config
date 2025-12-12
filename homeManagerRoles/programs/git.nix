@@ -11,6 +11,9 @@
   sops.secrets."keys/composes-repo-key" = {
     mode = "0600";
   };
+  sops.secrets."keys/hugo-website-repo-key" = {
+    mode = "0600";
+  };
   sops.secrets."keys/nixos-dan-key" = {
     mode = "0600";
   };
@@ -58,7 +61,17 @@
           "PreferredAuthentications" = "publickey";
         };
       };
-      "dan" = lib.hm.dag.entryAfter [ "github.com-composes" ] {
+      "github.com-hugo-website" = lib.hm.dag.entryAfter [ "github.com-composes" ] {
+        hostname = "github.com";
+        user = "git";
+        identityFile = [
+          config.sops.secrets."keys/hugo-website-repo-key".path
+        ];
+        extraOptions = {
+          "PreferredAuthentications" = "publickey";
+        };
+      };
+      "dan" = lib.hm.dag.entryAfter [ "github.com-hugo-website" ] {
         match = ''user dan'';
         hostname = "%h";
         user = "dan";
@@ -70,7 +83,7 @@
           "AddKeysToAgent" = "yes";
         };
       };
-      "deploy" = lib.hm.dag.entryAfter [ "github.com-composes" ] {
+      "deploy" = lib.hm.dag.entryAfter [ "github.com-hugo-website" ] {
         match = ''user deploy'';
         hostname = "%h";
         user = "deploy";
