@@ -18,7 +18,8 @@
       	      daemon
       #	      user                haproxy
       #	      group               haproxy
-      #	      log                 /dev/log local0
+       	      log                 /dev/log local5
+              #log 127.0.0.1 local5
       #	      maxconn             5000
       #	      chroot              /var/lib/haproxy
       #	      pidfile             /var/run/haproxy.pid
@@ -102,6 +103,46 @@
           mode tcp
           option tcp-check
           server firelink_svr firelink-svr:25565
+    '';
+  };
+
+  # Syslogd service for writing HAProxy logs to file
+  services.rsyslogd = {
+    enable = true;
+    extraConfig = ''
+      local5.*     /var/log/haproxy.log
+    '';
+  };
+
+  # Configure persistence for fail2ban
+  environment.persistence."/persist/system" = {
+    hideMounts = true;
+    directories = [
+      "/var/lib/fail2ban"
+    ];
+  };
+
+  # Configure fail2ban
+  services.fail2ban = {
+    enable = true;
+    ignoreIP = [ "100.0.0.0/8" ];
+    jails = {
+      sites.settings = {
+        filter = "sites";
+        logpath = "/var/log/haproxy.log";
+        maxretry = 10;
+        bantime = 600;
+        backend = "auto";
+        enabled = true;
+      };
+    };
+  };
+
+  # Configure fail2ban filters
+  environment.etc = {
+    "fail2ban/filter.d/sites.conf".text = ''
+      [Definition]
+      failregex = .*<HOST> .*main_https_listen .*$;
     '';
   };
 
