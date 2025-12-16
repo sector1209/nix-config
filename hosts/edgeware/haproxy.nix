@@ -6,6 +6,7 @@
     443
     25565
     25566
+    514
   ];
 
   services.haproxy = {
@@ -78,7 +79,7 @@
           server mac mac:443 send-proxy-v2
 
         backend blog_backend
-          server mac mac:443
+          server mac mac:443 send-proxy-v2
 
         frontend mc_listen
           bind *:25565
@@ -110,7 +111,22 @@
   services.rsyslogd = {
     enable = true;
     extraConfig = ''
+      #################
+      #### MODULES ####
+      #################
+
+      # provides TCP syslog reception
+      module(load="imtcp")
+      input(type="imtcp" port="514")
+
       local5.*     /var/log/haproxy.log
+
+      # Separate Caddy logs by tag
+      if $programname == 'caddy-cal' then /var/log/remote/caddy-cal.log
+      & stop
+
+      if $programname == 'caddy-blog' then /var/log/remote/caddy-blog.log
+      & stop
     '';
   };
 
@@ -126,11 +142,43 @@
   services.fail2ban = {
     enable = true;
     ignoreIP = [ "100.0.0.0/8" ];
+    bantime-increment = {
+      enable = true;
+      overalljails = true;
+    };
     jails = {
-      sites.settings = {
-        filter = "sites";
-        logpath = "/var/log/haproxy.log";
+      cal-200.settings = {
+        filter = "sites-200";
+        logpath = "/var/log/remote/caddy-cal.log";
+        findtime = 20;
         maxretry = 10;
+        bantime = 600;
+        backend = "auto";
+        enabled = true;
+      };
+      cal-404.settings = {
+        filter = "sites-404";
+        logpath = "/var/log/remote/caddy-cal.log";
+        findtime = 20;
+        maxretry = 5;
+        bantime = 600;
+        backend = "auto";
+        enabled = true;
+      };
+      blog-200.settings = {
+        filter = "sites-200";
+        logpath = "/var/log/remote/caddy-blog.log";
+        findtime = 10;
+        maxretry = 50;
+        bantime = 600;
+        backend = "auto";
+        enabled = true;
+      };
+      blog-404.settings = {
+        filter = "sites-404";
+        logpath = "/var/log/remote/caddy-blog.log";
+        findtime = 10;
+        maxretry = 15;
         bantime = 600;
         backend = "auto";
         enabled = true;
@@ -140,9 +188,17 @@
 
   # Configure fail2ban filters
   environment.etc = {
-    "fail2ban/filter.d/sites.conf".text = ''
+    "fail2ban/filter.d/sites-200.conf".text = ''
       [Definition]
-      failregex = .*<HOST> .*main_https_listen .*$;
+      failregex   = "client_ip":"<HOST>"(.*)"status":200
+      datepattern = \d+
+      ignoreregex =
+    '';
+    "fail2ban/filter.d/sites-404.conf".text = ''
+      [Definition]
+      failregex   = "client_ip":"<HOST>"(.*)"status":404
+      datepattern = \d+
+      ignoreregex =
     '';
   };
 

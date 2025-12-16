@@ -12,6 +12,7 @@ in
     ./hardware-configuration.nix
     ./podman-compose.nix
     ./blog.nix
+    ./logging.nix
   ];
 
   networking.hostName = hostname;
