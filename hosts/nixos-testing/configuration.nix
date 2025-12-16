@@ -23,8 +23,6 @@ in
 
     deployMachine.enable = true;
 
-    flakeLockAutoUpdate.enable = true;
-
     services.beszel-agent.enable = true;
 
     vscode-server.enable = true;
