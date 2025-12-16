@@ -115,7 +115,5 @@ in
       "deploy"
     ];
 
-    system.rebuild.enableNg = true;
-
   };
 }
