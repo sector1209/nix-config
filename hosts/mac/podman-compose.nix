@@ -54,10 +54,6 @@
       	  tls
          }
       	}
-      	# log default {
-      	#   output stdout
-      	#   level INFO
-      	# }
     '';
     virtualHosts."cal.danmail.me" = {
       extraConfig = ''
@@ -73,12 +69,6 @@
         	  path /login /dashboard
         	}
         	respond @blocked 403
-        	#log {
-        	#output file /var/log/davis/access.log
-        	#  format transform "{common_log}" {
-        	#    time_local
-        	#  }
-         #}
         	reverse_proxy localhost:9000
       '';
     };
