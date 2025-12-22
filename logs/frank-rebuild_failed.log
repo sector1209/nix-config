@@ -1,0 +1,46 @@
+[35;1mwarning:[0m Git tree '/nix-config' is dirty
+[35;1mwarning:[0m Git tree '/nix-config' is dirty
+these 28 derivations will be built:
+  /nix/store/zliha3dsmgzwpzaybmkkcka5crjimr9y-system-path.drv
+  /nix/store/90li1bhzy3y265zv57a5qv31s3fckviz-dbus-1.drv
+  /nix/store/h6l82r1msr0nw8635azdn6ijzwhadzpp-X-Restart-Triggers-dbus.drv
+  /nix/store/ar5x13fvnisi8wi65hydr9w8npgf6c6d-unit-dbus.service.drv
+  /nix/store/5nylcxrhmgm134xsgb48zf2ba8ix1c0z-unit-script-linger-users-start.drv
+  /nix/store/fid70xr4djfavs2di15047z3vz8si65g-unit-linger-users.service.drv
+  /nix/store/flw25p5y92x90qhfzrpjyzicgrpbazxd-unit-beszel-agent.service.drv
+  /nix/store/23gd7xm1c6hbrzidsf9369zfrybqpsnf-nixos.conf.drv
+  /nix/store/idfhfd6rghqhbp1lpg76fc6gnya7g7bz-X-Restart-Triggers-systemd-modules-load.drv
+  /nix/store/hq1s0xl21ib8x9w15kbcrvjj33m09yxm-unit-systemd-modules-load.service.drv
+  /nix/store/2y6bj43y23yjc2086dqn8af2rrrpr13i-etc-sysctl.d-60-nixos.conf.drv
+  /nix/store/5m8vmpnih02h8iyhz6fmvajhc6bckaiz-X-Restart-Triggers-systemd-sysctl.drv
+  /nix/store/m3fg0fhxwhsa5ilg22sz7hqayfwbkdlr-unit-systemd-sysctl.service.drv
+  /nix/store/1w6y4rprcdb801df1b779d8sinmr064w-system-units.drv
+  /nix/store/77my9zzg57klgqribmnrg13360kw0cxx-daemon.json.drv
+  /nix/store/2iga7q5ybm1zmwj1662l6lya4lqm7hyl-unit-docker.service.drv
+  /nix/store/5fsnw3f4mcm7cyp1322pvgajxplprxra-etc-bashrc.drv
+  /nix/store/d96gv5gwiv3sfldq37cnxy89vf815k6f-docker-28.5.2_fish-completions.drv
+  /nix/store/k47206q0dmbvvvqry8i7iv8i343q7w1h-system_fish-completions.drv
+  /nix/store/8p0aylvqajjc9rw4vi5p1jy3lx3bl8sw-man-paths.drv
+  /nix/store/kdp474cs2qc8yw20242xd7fmpxd1d1sv-man-cache.drv
+  /nix/store/kczpcvkls37i1qndbkjn4fb5caps4sls-etc-man_db.conf.drv
+  /nix/store/vr4v7jy0hlac55f4x7jq56phgw80ar6x-unit-dbus.service.drv
+  /nix/store/ln5w4p39798jc1618hi3hhb26ph857ah-user-units.drv
+  /nix/store/mgvxl23xki7hkqf4y4msxban3q24zam4-config.fish.drv
+  /nix/store/mixpwgdcx1vp18pbvl7av5n0m0p8zk9v-nixos-env-preinit.fish.drv
+  /nix/store/78sx33mj9nr4lkx3jdzassk7lf6w1rf5-etc.drv
+  /nix/store/mv1xnhsb5fxfdbi2m66x3kilgk8mwrv7-nixos-system-frank-25.11.20251220.b3aad46.drv
+these 14 paths will be fetched (100.28 MiB download, 438.26 MiB unpacked):
+  /nix/store/a32bh328l7jaf2yv4rb2k0nk27vbhr2s-docker-28.5.2
+  /nix/store/b3n91d35sbcnnw2ybls0hjf0xka3nipc-docker-buildx-0.29.1
+  /nix/store/m8jcpi0c7s8i49sjlmda1dfrabaxx7k3-docker-compose-2.39.4
+  /nix/store/kba1zjja86543spvx53nr5q0lb09p6s4-docker-containerd-28.5.2
+  /nix/store/5xw1yx6a4aqybgw66raah1nnchj5669y-docker-plugins
+  /nix/store/mkghnqwcr9q81996br3wjvflaiigkzzq-docker-runc-28.5.2
+  /nix/store/yj400h9yk4p2xn4923dcpn82243qkvnh-fuse-overlayfs-1.15
+  /nix/store/8f2ipkqdcs9s5dcsq3f4cnvxv20flwhx-inih-62
+  /nix/store/5r75g4yk9l8ypl6p3k0qzlf4gkmil9dc-libslirp-4.9.1
+  /nix/store/gy89g8abcwnwir8hq2d0wz89kkvhd0q6-moby-28.5.2
+  /nix/store/krl5fajxs1547c8rvgf76fbfx5bhg5wn-rootlesskit-2.3.5
+  /nix/store/jbrjrspim34s8z70pjbims3irmawl9vs-slirp4netns-1.3.3
+  /nix/store/4n3y0ihf3mbchhhxbxg5dmhx39n03xkh-xfsprogs-6.17.0
+  /nix/store/ak9y08qkl7jvi6s5ac9j24r12ip2pp44-xfsprogs-6.17.0-bin

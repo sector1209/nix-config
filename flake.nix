@@ -93,6 +93,9 @@
       (mkNixos "spiros" inputs.nixpkgs [
         inputs.disko.nixosModules.default
       ])
+      (mkNixos "frank" inputs.nixpkgs [
+        inputs.disko.nixosModules.default
+      ])
       #      (mkNixos "generic-vm" inputs.nixpkgs [
       #	inputs.nixos-generators.nixosModules.all-formats
       #      ])
