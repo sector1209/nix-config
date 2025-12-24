@@ -25,6 +25,11 @@ in
 
     nginx.enable = true;
 
+    technitium-dns = {
+      enable = true;
+      hostName = "dns2";
+    };
+
   };
 
   services.tailscale = {
@@ -35,6 +40,12 @@ in
   roles.services.beszel-agent.enable = true;
 
   users.users.dan.uid = 1000;
+
+  # Disable motherboard RGB
+  services.hardware.openrgb = {
+    enable = true;
+    motherboard = "intel";
+  };
 
   system.stateVersion = "25.11";
 
