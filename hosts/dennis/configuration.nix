@@ -50,11 +50,16 @@ in
   boot.loader.systemd-boot.enable = true;
   #  boot.loader.grub.efiSupport = true;
 
-  # Disks
-
-  fileSystems."/mnt/diskyMedia" = {
-    device = "/dev/disk/by-uuid/e02f9614-603e-4736-90e9-038403c13340";
-    fsType = "ext4";
+  # Mount media storage disk
+  fileSystems = {
+    "/mnt/diskyMedia" = {
+      device = "/dev/disk/by-uuid/9c60086b-fc53-4821-895a-deb63815b9fd";
+      fsType = "btrfs";
+      options = [
+        "subvol=@media"
+        "noatime"
+      ];
+    };
   };
 
   system.stateVersion = "23.11";
