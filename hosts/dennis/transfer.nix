@@ -1,5 +1,3 @@
-# configuration for dennis
-
 {
   ...
 }:
@@ -49,6 +47,4 @@
 
   };
 
-  # TESTING PURPOSES
-  #  networking.firewall.enable = false;
 }
