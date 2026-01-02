@@ -166,7 +166,7 @@
         enabled = true;
       };
       blog-200.settings = {
-        filter = "sites-200";
+        filter = "blog-200";
         logpath = "/var/log/remote/caddy-blog.log";
         findtime = 10;
         maxretry = 50;
@@ -175,7 +175,7 @@
         enabled = true;
       };
       blog-404.settings = {
-        filter = "sites-404";
+        filter = "blog-404";
         logpath = "/var/log/remote/caddy-blog.log";
         findtime = 10;
         maxretry = 15;
@@ -200,6 +200,19 @@
       datepattern = \d+
       ignoreregex =
     '';
+    "fail2ban/filter.d/blog-200.conf".text = ''
+      [Definition]
+      failregex   = "X-Real-Ip":\["<HOST>"\](.*)"status":200
+      datepattern = \d+
+      ignoreregex =
+    '';
+    "fail2ban/filter.d/blog-404.conf".text = ''
+      [Definition]
+      failregex   = "X-Real-Ip":\["<HOST>"\](.*)"status":404
+      datepattern = \d+
+      ignoreregex =
+    '';
+
   };
 
 }

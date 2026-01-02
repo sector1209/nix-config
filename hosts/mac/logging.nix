@@ -16,7 +16,7 @@
 
       # Monitor Caddy blog.danmail.me access log
       input(type="imfile"
-            File="/var/log/caddy/access-blog.danmail.me.log"
+            File="/var/log/caddy/access-blog-backend.log"
             Tag="caddy-blog"
             Severity="info"
             Facility="local6")
