@@ -87,11 +87,11 @@
           mode tcp
 
         #acl dst_ip_darm dst_port 25566
-        acl dst_ip_firelink dst_port 25565
+      #  acl dst_ip_firelink dst_port 25565
 
         #use_backend darm_backend if dst_ip_darm
 
-        use_backend firelink_backend if dst_ip_firelink
+      #  use_backend firelink_backend if dst_ip_firelink
 
       #  default_backend mc_backend
 
@@ -100,10 +100,10 @@
         #  option tcp-check
         #  server darm_mc_svr darm-svr:25565
 
-        backend firelink_backend
-          mode tcp
-          option tcp-check
-          server firelink_svr firelink-svr:25565
+        #backend firelink_backend
+        #  mode tcp
+        #  option tcp-check
+        #  server firelink_svr firelink-svr:25565
     '';
   };
 
