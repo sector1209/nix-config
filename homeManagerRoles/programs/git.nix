@@ -72,7 +72,7 @@
         };
       };
       "dan" = lib.hm.dag.entryAfter [ "github.com-hugo-website" ] {
-        match = ''user dan'';
+        match = "user dan";
         hostname = "%h";
         user = "dan";
         identityFile = [
@@ -84,7 +84,7 @@
         };
       };
       "deploy" = lib.hm.dag.entryAfter [ "github.com-hugo-website" ] {
-        match = ''user deploy'';
+        match = "user deploy";
         hostname = "%h";
         user = "deploy";
         identityFile = [
