@@ -1,7 +1,6 @@
 # custom module for sops
 
 {
-  pkgs,
   lib,
   config,
   inputs,
@@ -10,7 +9,7 @@
 {
 
   imports = [
-    inputs.sops-nix.nixosModules.sops
+    inputs.nix-secrets.nixosModules.nas
   ];
 
   options = {
@@ -18,13 +17,6 @@
   };
 
   config = lib.mkIf config.roles.sops.enable {
-
-    environment.systemPackages = with pkgs; [
-      sops
-    ];
-
-    sops.defaultSopsFile = ../../secrets/secrets.yaml;
-    sops.defaultSopsFormat = "yaml";
 
     sops.age.keyFile = "/sops-keys/sops/age/keys.txt";
 

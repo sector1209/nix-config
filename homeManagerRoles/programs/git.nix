@@ -8,6 +8,9 @@
   sops.secrets."keys/nix-config-repo-key" = {
     mode = "0600";
   };
+  sops.secrets."keys/nix-secrets-repo-key" = {
+    mode = "0600";
+  };
   sops.secrets."keys/composes-repo-key" = {
     mode = "0600";
   };
@@ -51,7 +54,17 @@
           "PreferredAuthentications" = "publickey";
         };
       };
-      "github.com-composes" = lib.hm.dag.entryAfter [ "github.com" ] {
+      "github.com-nix-secrets" = {
+        hostname = "github.com";
+        user = "git";
+        identityFile = [
+          config.sops.secrets."keys/nix-secrets-repo-key".path
+        ];
+        extraOptions = {
+          "PreferredAuthentications" = "publickey";
+        };
+      };
+      "github.com-composes" = lib.hm.dag.entryAfter [ "github.com-nix-secrets" ] {
         hostname = "github.com";
         user = "git";
         identityFile = [
