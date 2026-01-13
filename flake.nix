@@ -19,7 +19,7 @@
     };
 
     # Sops-nix
-    sops-nix.url = "github:Mic92/sops-nix";
+    #sops-nix.url = "github:Mic92/sops-nix";
 
     # Nixvim
     nixvim = {
@@ -49,6 +49,8 @@
     wazuh-agent = {
       url = "github:paulvictor/wazuh.nix";
     };
+
+    nix-secrets.url = "git+ssh://git@github.com-nix-secrets/sector1209/nix-secrets.git";
 
   };
 
