@@ -18,6 +18,17 @@ jobs:
               uses: webfactory/ssh-agent@master
               with:
                   ssh-private-key: ${{ secrets.SECRETS_REPO_PRIVATE_KEY }}
+            - name: Configure SSH for private repo
+              run: |
+                  mkdir -p ~/.ssh
+                  cat >> ~/.ssh/config << EOF
+                  Host github.com-nix-secrets
+                    HostName github.com
+                    User git
+                    IdentityFile ~/.ssh/id_ed25519
+                    StrictHostKeyChecking no
+                  EOF
+                  chmod 600 ~/.ssh/config
             - uses: actions/checkout@v4
             - uses: DeterminateSystems/determinate-nix-action@v3
             - id: update
