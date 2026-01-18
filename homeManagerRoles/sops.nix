@@ -11,8 +11,6 @@
     inputs.nix-secrets.homeManagerModules.nas
   ];
 
-  sops.age.keyFile = "/sops-keys/sops/age/keys.txt";
-
   # Testing if she works
   sops.secrets.example-key = { };
 

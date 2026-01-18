@@ -18,8 +18,6 @@
 
   config = lib.mkIf config.roles.sops.enable {
 
-    sops.age.keyFile = "/sops-keys/sops/age/keys.txt";
-
     # Testing if she works
     sops.secrets.example-key = { };
 
