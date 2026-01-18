@@ -42,10 +42,8 @@ IaC for my NixOS machines. So many hours.
 │       ├── default.nix
 │       └── customPackage.sh
 ├── README.md
-├── scripts <-- Custom scripts
-│   └── exampleScript.sh
-└── secrets <-- Encrypted secrets for sops-nix
-    └── secrets.yaml
+└── scripts <-- Custom scripts
+    └── exampleScript.sh
 ````
 
 ## Deployment (NixOS)
