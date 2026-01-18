@@ -43,6 +43,7 @@ in
       system = "x86_64-linux";
       specialArgs = {
         inherit inputs self;
+        secrets = import inputs.nix-secrets;
       };
       modules = [
         ./hosts/${machineHostname}/configuration.nix

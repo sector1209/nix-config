@@ -3,6 +3,7 @@
 {
   lib,
   config,
+  secrets,
   ...
 }:
 let
@@ -22,7 +23,7 @@ in
       mutableUsers = lib.mkDefault false;
       users."${user}" = {
         isNormalUser = lib.mkDefault true;
-        initialHashedPassword = lib.mkDefault "$y$j9T$8dwO5vaOgfoqjajP6P1o4.$GAXJl8bFxi.7dJxO7jElSCF3T2OmEo/IYDI1VlmHL.8";
+        initialHashedPassword = lib.mkDefault secrets.default-initialHashedPassword;
         extraGroups = lib.mkDefault [ "wheel" ];
         openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIInQa//eQdA7R3LWyccy3dyNqbjisirWiCaeymYc2C7l dan@danbook-pro.bee-atria.ts.net"
