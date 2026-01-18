@@ -1,6 +1,11 @@
 # configuration for mac
 
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  secrets,
+  ...
+}:
 let
 
   hostname = "mac";
@@ -33,7 +38,7 @@ in
 
   users = {
     users.dan = {
-      initialHashedPassword = "$y$j9T$pyKwNb81wPLKkJIsS9OJA.$0FbQbUV.Nb8eZ6r2SS7XMsXfsidlUvE60bboqJibVUA";
+      initialHashedPassword = secrets.mac-initialHashedPassword;
     };
   };
 
