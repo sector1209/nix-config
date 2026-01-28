@@ -35,7 +35,6 @@ in
     "deployUser"
     "prometheus-exporter"
     "promtail"
-    "wazuh-agent"
   ];
 
   documentation.nixos.enable = true;
