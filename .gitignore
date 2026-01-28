@@ -6,3 +6,4 @@ core
 core/
 rebuild.log
 .zed/*
+logs/*
