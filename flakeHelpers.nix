@@ -1,15 +1,18 @@
 inputs: self:
 let
-  homeManagerCfg = userPackages: extraImports: {
+  homeManagerCfg = userPackages: extraImports: nixpkgsVersion: extraModules: machineHostname: {
     home-manager.useGlobalPkgs = false;
     home-manager.extraSpecialArgs = {
       inherit inputs;
     };
     home-manager.users.dan.imports = [
-      #      inputs.nix-index-database.hmModules.nix-index
       ./homeManagerRoles/default.nix
     ]
-    ++ extraImports;
+    ++ extraImports
+    ++ nixpkgsVersion.lib.optionals (
+      (nixpkgsVersion.lib.elem inputs.home-manager-unstable.nixosModules.home-manager extraModules)
+      || (nixpkgsVersion.lib.elem inputs.home-manager.nixosModules.home-manager extraModules)
+    ) [ ./hosts/${machineHostname}/home-manager-configuration.nix ];
     home-manager.backupFileExtension = "bak";
     home-manager.useUserPackages = userPackages;
   };
@@ -53,7 +56,7 @@ in
       ++ nixpkgsVersion.lib.optionals (
         (nixpkgsVersion.lib.elem inputs.home-manager-unstable.nixosModules.home-manager extraModules)
         || (nixpkgsVersion.lib.elem inputs.home-manager.nixosModules.home-manager extraModules)
-      ) [ (homeManagerCfg false [ ]) ]
+      ) [ (homeManagerCfg false [ ] nixpkgsVersion extraModules machineHostname) ]
       ++
         nixpkgsVersion.lib.optionals
           (nixpkgsVersion.lib.elem inputs.disko.nixosModules.default extraModules)
