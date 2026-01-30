@@ -1,6 +1,11 @@
 # Role module for ACME
 
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  secrets,
+  ...
+}:
 let
 
   roleName = "acme";
@@ -22,7 +27,7 @@ in
     security.acme = {
       acceptTerms = true;
       defaults = {
-        email = "admin+acme@danmail.me";
+        email = secrets.acme-email;
         dnsProvider = "porkbun";
         credentialFiles = {
           "PORKBUN_API_KEY_FILE" = config.sops.secrets.porkbun-api-key.path;
