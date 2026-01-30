@@ -16,6 +16,8 @@ in
 
   config = lib.mkIf config.roles.${roleName}.enable {
 
+    roles.sops.enable = true;
+
     sops.secrets."keys/nixos-dan-key" = {
       mode = "0600";
     };

@@ -17,6 +17,8 @@ in
 
   config = lib.mkIf config.roles.${roleName}.enable {
 
+    roles.sops.enable = true;
+
     sops.secrets."keys/nix-config-repo-key" = {
       mode = "0600";
     };
