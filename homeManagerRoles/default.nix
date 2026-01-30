@@ -20,7 +20,6 @@ in
   ];
 
   roles = mkDefaultRoles [
-    "git"
   ];
 
 }
