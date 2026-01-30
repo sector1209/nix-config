@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  secrets,
   ...
 }:
 let
@@ -40,7 +41,7 @@ in
       settings = {
         user = {
           name = "Sector1209";
-          email = "gh@danmail.me";
+          email = secrets.gh-email;
         };
         pull = {
           rebase = true;
@@ -125,9 +126,6 @@ in
 
     # Nicely reload system units when changing configs
     systemd.user.startServices = "sd-switch";
-
-    # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-    home.stateVersion = "24.11";
 
   };
 }

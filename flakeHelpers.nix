@@ -4,6 +4,7 @@ let
     home-manager.useGlobalPkgs = false;
     home-manager.extraSpecialArgs = {
       inherit inputs;
+      secrets = import inputs.nix-secrets;
     };
     home-manager.users.dan.imports = [
       ./homeManagerRoles/default.nix
