@@ -13,8 +13,8 @@ in
 {
 
   imports = [
-    #    ./home.nix
     ./programs/git.nix
+    ./programs/ssh.nix
     ./sops.nix
     ./users/dan.nix
   ];
