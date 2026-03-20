@@ -290,7 +290,7 @@
         	-e CALDAV_ENABLED=true \
         	-e CARDDAV_ENABLED=false \
         	-e DATABASE_DRIVER=mysql \
-        	-e DATABASE_URL=mysql://davis_user:''${MYSQL_PASS}@mysql-davis:3306/davis?serverVersion=mariadb-10.6.10&charset=utf8mb4 \
+        	-e DATABASE_URL=mysql://davis_user:''${MYSQL_PASS}@mysql-davis:3306/davis?serverVersion=8.0.43&charset=utf8mb4 \
         	-e INVITE_FROM_ADDRESS=no-reply@example.org \
         	-e MAILER_DSN=smtp://userdav:test@smtp.myprovider.com:587 \
         	-e WEBDAV_ENABLED=false \
