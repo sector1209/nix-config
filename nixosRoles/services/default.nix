@@ -22,6 +22,7 @@
     ./ssh.nix
     ./tailscale.nix
     ./technitium-dns.nix
+    ./uptime-kuma.nix
     ./vscode-server.nix
   ];
 

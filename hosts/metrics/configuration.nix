@@ -31,6 +31,8 @@ in
 
     grafanaStack.enable = true;
 
+    uptime-kuma.enable = true;
+
   };
 
   services.nginx.virtualHosts."beszel" = {
