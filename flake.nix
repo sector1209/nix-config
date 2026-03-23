@@ -83,7 +83,7 @@
       ])
       (mkNixos "backupBox" inputs.nixpkgs [
       ])
-      (mkNixos "metrics" inputs.nixpkgs [
+      (mkNixos "metrics" inputs.nixpkgs-unstable [
       ])
       (mkNixos "mac" inputs.nixpkgs [
         inputs.disko.nixosModules.default

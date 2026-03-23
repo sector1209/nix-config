@@ -62,14 +62,23 @@ in
 
   config = lib.mkIf config.roles.${roleName}.enable {
 
+    sops.secrets = {
+      grafana-secret_key = {
+        owner = config.users.users.grafana.name;
+      };
+    };
+
     services.grafana = {
       enable = true;
-      settings.server = {
-        # Listening address and TCP port
-        http_addr = "0.0.0.0";
-        http_port = 9010;
-        # Grafana needs to know on which domain and URL it's running:
-        domain = config.networking.hostName;
+      settings = {
+        server = {
+          # Listening address and TCP port
+          http_addr = "0.0.0.0";
+          http_port = 9010;
+          # Grafana needs to know on which domain and URL it's running:
+          domain = config.networking.hostName;
+        };
+        security.secret_key = "$__file{${config.sops.secrets.grafana-secret_key.path}}";
       };
       provision = {
         enable = true;
