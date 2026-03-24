@@ -72,7 +72,7 @@ do_rebuild() {
 
   # Check if target host is in the flake
   if [[ " ${flakeHosts[*]} " != *" ${target} "* ]]; then
-    error "$target} not found in flake hosts"
+    error "$target not found in flake hosts"
     exit 1
   fi
 
