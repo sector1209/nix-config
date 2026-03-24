@@ -26,8 +26,9 @@
       keyPath = "${config.sops.secrets."borg/diskyDocker-priv".path}";
     };
 
-    environment.systemPackages = [
-      pkgs.docker-compose-language-service
+    environment.systemPackages = with pkgs; [
+      docker-compose-language-service
+      custom.docker-netshoot
     ];
 
     users.users.dan = {
