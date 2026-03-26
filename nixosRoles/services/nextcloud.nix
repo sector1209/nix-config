@@ -113,8 +113,8 @@ in
       settings = {
         overwriteProtocol = "https";
         trusted_proxies = [
-          "192.168.50.0/24"
-          "0.0.0.0/0"
+          "127.0.0.1"
+          "127.0.0.0/8"
         ];
         default_phone_region = "GB";
         maintenance_window_start = 2; # 02:00
