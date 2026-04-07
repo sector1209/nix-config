@@ -29,6 +29,8 @@ in
 
     borgbackupServer.enable = true;
 
+    beszel-agent.extraFilesystems = [ "/mnt/qnapBackup" ];
+
   };
 
   system.stateVersion = "24.11";
