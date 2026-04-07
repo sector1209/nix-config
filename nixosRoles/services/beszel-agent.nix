@@ -1,96 +1,47 @@
-# modules/beszel-agent.nix
+# Role module for Beszel agent
+
 {
-  config,
   lib,
+  config,
   ...
 }:
-
-with lib;
-
 let
-  cfg = config.services.beszel-agent;
+
+  roleName = "beszel-agent";
+
 in
 {
-  options.services.beszel-agent = {
-    enable = mkEnableOption "Beszel agent service";
 
-    # package = mkOption {
-    #   type = types.package;
-    #   default = pkgs.beszel;
-    #   description = "The beszel package to use.";
-    # };
-
-    port = mkOption {
-      type = types.port;
-      default = 45876;
-      description = "Port number for the beszel agent to listen on.";
-    };
-
-    key = mkOption {
-      type = types.str;
-      default = "\"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIADjeYXIiwnRUsc/Px5n6n6W0+ttfM8wODsiZUDubOqj\"";
-      description = "SSH key for the beszel agent.";
-    };
-
-    extraFilesystems = mkOption {
-      type = types.listOf types.str;
-      default = [ "/" ];
-      description = "List of additional filesystems to monitor.";
-    };
-
-    user = mkOption {
-      type = types.str;
-      default = "root";
-      description = "User account under which the service runs.";
-    };
-
-    groups = mkOption {
-      type = types.listOf types.str;
-      default = [ "root" ];
-      description = "Groups under which the service runs.";
-    };
-
-    restartSec = mkOption {
-      type = types.int;
-      default = 5;
-      description = "Time to wait before restarting the service.";
-    };
-
-    gpu = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Sets env var to enable GPU monitoring.";
+  options = {
+    roles.${roleName} = {
+      enable = lib.mkEnableOption "enables ${roleName} role";
+      extraFilesystems = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "Extra filesystems to monitor";
+      };
     };
   };
 
-  config = mkIf cfg.enable {
-    # users.users.${cfg.user} = {
-    #   isSystemUser = true;
-    #   group = builtins.head cfg.groups;
-    #   extraGroups = builtins.tail cfg.groups;
-    #   description = "Beszel Agent service user";
-    # };
+  config = lib.mkIf config.roles.${roleName}.enable {
 
-    # #users.groups.${cfg.group} = {};
-    # users.groups = builtins.listToAttrs (map (g: { name = g; value = {}; }) cfg.groups);
-
-    systemd.services.beszel-agent = {
-      description = "Beszel Agent Service";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-
-      serviceConfig = {
-        Environment = [
-          "KEY=${cfg.key}"
-          "EXTRA_FILESYSTEMS=${concatStringsSep "," cfg.extraFilesystems}"
-          "PATH=/run/current-system/sw/bin:$PATH"
-        ];
-        ExecStart = "/run/current-system/sw/bin/beszel-agent";
-        User = cfg.user;
-        Group = builtins.head cfg.groups;
-        Restart = "always";
-        RestartSec = cfg.restartSec;
+    sops.secrets = {
+      beszel-env-file = {
+        owner = config.users.users.beszel-agent.name;
       };
     };
+
+    services.beszel.agent = {
+      enable = true;
+      openFirewall = true;
+      environment = {
+        PORT = "45876";
+        EXTRA_FILESYSTEMS = lib.concatStringsSep "," config.roles.beszel-agent.extraFilesystems;
+        DOCKER_HOST = lib.mkIf config.virtualisation.docker.rootless.enable "unix:///run/user/1001/docker.sock";
+        HUB_URL = "https://beszel.danmail.me";
+      };
+      environmentFile = config.sops.secrets.beszel-env-file.path;
+    };
+
   };
 }

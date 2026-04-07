@@ -27,8 +27,6 @@ in
       hostName = "dns";
     };
 
-    services.beszel-agent.enable = true;
-
   };
 
   system.stateVersion = "24.11";

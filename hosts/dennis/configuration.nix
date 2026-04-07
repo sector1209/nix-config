@@ -26,8 +26,6 @@ in
 
     glances.enable = true;
 
-    services.beszel-agent.enable = true;
-
   };
 
   # Define a user account.

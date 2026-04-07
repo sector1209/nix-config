@@ -21,9 +21,7 @@ in
 
     gotify.enable = true;
 
-    services.beszel-agent.enable = true;
-
-    services.beszel-hub.enable = true;
+    beszel-hub.enable = true;
 
     nginx.enable = true;
 
@@ -33,23 +31,6 @@ in
 
     uptime-kuma.enable = true;
 
-  };
-
-  services.nginx.virtualHosts."beszel" = {
-
-  };
-
-  # configure nginx host
-  services.nginx.virtualHosts = {
-    "beszel.danmail.me" = {
-      enableACME = true;
-      acmeRoot = null; # i think this makes it use DNS-01 validation
-      addSSL = true;
-      locations."/" = {
-        proxyPass = "http://localhost:6432";
-        proxyWebsockets = true;
-      };
-    };
   };
 
   system.stateVersion = "24.11";

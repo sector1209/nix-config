@@ -33,8 +33,6 @@ in
 
     nginx.enable = true;
 
-    services.beszel-agent.enable = true;
-
   };
 
   system.stateVersion = "24.11";

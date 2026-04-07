@@ -19,6 +19,7 @@ in
   ];
 
   roles = mkDefaultRoles [
+    "beszel-agent"
     "sops"
     "flakeSettings"
     "updateSettings"

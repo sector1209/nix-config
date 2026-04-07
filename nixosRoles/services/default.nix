@@ -5,7 +5,8 @@
 
   imports = [
     ./acme.nix
-    ./beszel.nix
+    ./beszel-agent.nix
+    ./beszel-hub.nix
     ./borgbackupServer.nix
     ./docker.nix
     ./flakeAutoUpdateSvr.nix

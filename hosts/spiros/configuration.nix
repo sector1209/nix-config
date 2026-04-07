@@ -45,8 +45,6 @@ in
     };
   };
 
-  roles.services.beszel-agent.enable = true;
-
   users.users.dan.uid = 1000;
 
   system.stateVersion = "24.11";

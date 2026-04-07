@@ -115,6 +115,4 @@ in
 
   programs.fuse.userAllowOther = true;
 
-  roles.services.beszel-agent.enable = true;
-
 }

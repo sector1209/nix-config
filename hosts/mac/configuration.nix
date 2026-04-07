@@ -26,8 +26,6 @@ in
 
     imperm.enable = true;
 
-    services.beszel-agent.enable = true;
-
   };
 
   # Enable QEMU Guest for Proxmox

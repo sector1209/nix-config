@@ -37,8 +37,6 @@ in
     extraSetFlags = [ "--advertise-exit-node" ];
   };
 
-  roles.services.beszel-agent.enable = true;
-
   users.users.dan.uid = 1000;
 
   # Disable motherboard RGB
