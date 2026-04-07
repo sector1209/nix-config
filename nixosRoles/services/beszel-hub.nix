@@ -1,4 +1,4 @@
-# Role module for X
+# Role module for Beszel hub
 
 {
   lib,

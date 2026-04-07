@@ -26,6 +26,11 @@ in
 
     glances.enable = true;
 
+    beszel-agent.extraFilesystems = [
+      "/mnt/diskyMedia__diskyMedia"
+      "/mnt/diskyDocker__diskyDocker"
+    ];
+
   };
 
   # Define a user account.

@@ -33,6 +33,10 @@ in
 
     nginx.enable = true;
 
+    beszel-agent.extraFilesystems = [
+      "/var/lib/nextcloud__Nextcloud Mount"
+    ];
+
   };
 
   system.stateVersion = "24.11";
