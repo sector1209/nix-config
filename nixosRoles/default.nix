@@ -34,7 +34,7 @@ in
     "tailscale"
     "deployUser"
     "prometheus-exporter"
-    "promtail"
+    "grafana-alloy"
   ];
 
   documentation.nixos.enable = true;

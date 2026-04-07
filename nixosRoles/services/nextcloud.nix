@@ -50,35 +50,34 @@ in
       '';
     };
 
-    # Promtail exporter for nextcloud logs
-    services.promtail = {
-      configuration = {
-        scrape_configs = [
-          {
-            job_name = "system";
-            static_configs = [
-              {
-                targets = [ "localhost" ];
-                labels = {
-                  instance = "nc.danmail.me";
-                  job = "nextcloud";
-                  __path__ = "/var/lib/nextcloud/data/nextcloud.log";
-                };
-              }
-            ];
-            relabel_configs = [
-              {
-                target_label = "host";
-                replacement = "${config.networking.hostName}";
-              }
-            ];
-          }
-        ];
-      };
-    };
+    # Grafana-alloy exporter for nextcloud logs
+    environment.etc."alloy/nextcloud.alloy".text = ''
+      // Scrape Nextcloud log file
+      local.file_match "nextcloud" {
+        path_targets = [{
+          __path__ = "/var/lib/nextcloud/data/nextcloud.log",
+          instance  = "nc.danmail.me",
+          job       = "nextcloud",
+        }]
+      }
 
-    # Allow Promtail user to access nextcloud logs
-    users.users.promtail.extraGroups = [ "nextcloud" ];
+      loki.source.file "nextcloud" {
+        targets    = local.file_match.nextcloud.targets
+        forward_to = [loki.relabel.nextcloud.receiver]
+      }
+
+      loki.relabel "nextcloud" {
+        forward_to = [loki.write.default.receiver]
+
+        rule {
+          target_label = "host"
+          replacement  = "${config.networking.hostName}"
+        }
+      }
+    '';
+
+    # Allow alloy dynamic user to access nextcloud logs
+    systemd.services.alloy.serviceConfig.SupplementaryGroups = [ "nextcloud" ];
 
     # Configure nginx
     services.nginx.virtualHosts = {

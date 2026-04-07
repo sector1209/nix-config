@@ -12,13 +12,13 @@
     ./glances.nix
     ./gotify.nix
     ./grafanaStack.nix
+    ./grafana-alloy.nix
     ./immich.nix
     ./influxdb.nix
     ./jellyfin.nix
     ./nextcloud.nix
     ./nginx.nix
     ./prometheus-exporter.nix
-    ./promtail.nix
     ./ssh.nix
     ./tailscale.nix
     ./technitium-dns.nix
