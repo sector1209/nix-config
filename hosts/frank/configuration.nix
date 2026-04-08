@@ -59,16 +59,15 @@ in
     };
   };
 
-  # Allow Beszel agent to access devices
   systemd.services.beszel-agent.serviceConfig = {
+    # Allow Beszel agent to access devices
     PrivateDevices = lib.mkForce false;
+    # Allow Beszel agent access to Nvidia GPU
+    DeviceAllow = [
+      "/dev/nvidiactl rw"
+      "/dev/nvidia0 rw"
+    ];
   };
-
-  # Allow Beszel agent access to Nvidia GPU
-  systemd.services.beszel-agent.serviceConfig.DeviceAllow = [
-    "/dev/nvidiactl rw"
-    "/dev/nvidia0 rw"
-  ];
 
   system.stateVersion = "25.11";
 
