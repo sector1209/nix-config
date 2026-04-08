@@ -1,7 +1,7 @@
 # configuration for frank
 
 {
-  pkgs,
+  lib,
   ...
 }:
 let
@@ -52,8 +52,22 @@ in
   hardware.nvidia.open = false;
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = [
-    pkgs.nvtopPackages.nvidia
+  # Enable Beszel agent GPU monitoring
+  services.beszel.agent = {
+    environment = {
+      GPU_COLLECTOR = "nvidia-smi";
+    };
+  };
+
+  # Allow Beszel agent to access devices
+  systemd.services.beszel-agent.serviceConfig = {
+    PrivateDevices = lib.mkForce false;
+  };
+
+  # Allow Beszel agent access to Nvidia GPU
+  systemd.services.beszel-agent.serviceConfig.DeviceAllow = [
+    "/dev/nvidiactl rw"
+    "/dev/nvidia0 rw"
   ];
 
   system.stateVersion = "25.11";
