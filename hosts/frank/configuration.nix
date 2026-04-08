@@ -1,6 +1,7 @@
 # configuration for frank
 
 {
+  pkgs,
   ...
 }:
 let
@@ -44,6 +45,16 @@ in
     enable = true;
     motherboard = "intel";
   };
+
+  # Enable Nvidia drivers
+  hardware.graphics.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia.open = false;
+  nixpkgs.config.allowUnfree = true;
+
+  environment.systemPackages = [
+    pkgs.nvtopPackages.nvidia
+  ];
 
   system.stateVersion = "25.11";
 
