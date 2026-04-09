@@ -52,12 +52,6 @@ in
     ];
   };
 
-  # Install intel_gpu_top
-  # Not needed after https://github.com/NixOS/nixpkgs/pull/508090 is merged.
-  environment.systemPackages = [
-    pkgs.intel-gpu-tools
-  ];
-
   systemd.services.beszel-agent.serviceConfig = {
     # Enable CAP_PERFMON in service unit
     AmbientCapabilities = [ "CAP_PERFMON" ];
