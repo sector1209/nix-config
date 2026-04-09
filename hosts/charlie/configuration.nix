@@ -44,7 +44,6 @@ in
   # Enable Beszel agent GPU monitoring
   services.beszel.agent = {
     environment = {
-      LOG_LEVEL = "debug";
       GPU_COLLECTOR = "intel_gpu_top";
     };
     extraPath = [
