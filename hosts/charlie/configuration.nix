@@ -47,7 +47,7 @@ in
       GPU_COLLECTOR = "intel_gpu_top";
     };
     extraPath = [
-      # Not needed after https://github.com/NixOS/nixpkgs/pull/508090 is merged.
+      # Not needed if using services.xserver.videoDrivers
       pkgs.intel-gpu-tools
     ];
   };
@@ -55,6 +55,7 @@ in
   systemd.services.beszel-agent.serviceConfig = {
     # Enable CAP_PERFMON in service unit
     AmbientCapabilities = [ "CAP_PERFMON" ];
+    # Drop all capabilities except CAP_PERFMON
     CapabilityBoundingSet = [ "CAP_PERFMON" ];
     # Allow privilages to be inherited by child processes
     NoNewPrivileges = lib.mkForce false;
