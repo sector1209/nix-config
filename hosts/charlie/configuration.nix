@@ -66,13 +66,8 @@ in
     NoNewPrivileges = lib.mkForce false;
     # Prevent namespace scoping
     PrivateUsers = lib.mkForce false;
-    # Allow Beszel agent to access devices generally
+    # Allow Beszel agent to access devices
     PrivateDevices = lib.mkForce false;
-    # Allow Beszel agent access to Intel GPU devices
-    DeviceAllow = [
-      "/dev/dri/card1 rw"
-      "/dev/dri/renderD128 rw"
-    ];
     # Prevent filtering of perf_event_open system calls
     SystemCallFilter = lib.mkForce [
       "@system-service"
