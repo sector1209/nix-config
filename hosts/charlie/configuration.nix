@@ -44,6 +44,7 @@ in
   # Enable Beszel agent GPU monitoring
   services.beszel.agent = {
     environment = {
+      LOG_LEVEL = "debug";
       GPU_COLLECTOR = "intel_gpu_top";
     };
     extraPath = [
@@ -57,8 +58,6 @@ in
     AmbientCapabilities = [ "CAP_PERFMON" ];
     # Drop all capabilities except CAP_PERFMON
     CapabilityBoundingSet = [ "CAP_PERFMON" ];
-    # Allow privilages to be inherited by child processes
-    NoNewPrivileges = lib.mkForce false;
     # Prevent namespace scoping
     PrivateUsers = lib.mkForce false;
     # Allow Beszel agent to access devices
