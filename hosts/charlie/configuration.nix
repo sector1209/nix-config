@@ -47,11 +47,13 @@ in
       GPU_COLLECTOR = "intel_gpu_top";
     };
     extraPath = [
+      # Not needed after https://github.com/NixOS/nixpkgs/pull/508090 is merged.
       pkgs.intel-gpu-tools
     ];
   };
 
   # Install intel_gpu_top
+  # Not needed after https://github.com/NixOS/nixpkgs/pull/508090 is merged.
   environment.systemPackages = [
     pkgs.intel-gpu-tools
   ];
