@@ -37,5 +37,9 @@ in
       };
     };
 
+    environment.persistence."/persist/system".directories = lib.mkIf config.roles.imperm.enable [
+      "/var/lib/acme"
+    ];
+
   };
 }
