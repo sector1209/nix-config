@@ -62,7 +62,7 @@ in
   systemd.services.beszel-agent.serviceConfig = {
     # Allow Beszel agent to access devices
     PrivateDevices = lib.mkForce false;
-    # Allow Beszel agent access to Nvidia GPU
+    # Allow Beszel agent access to Nvidia GPU (may be unnecessary with PrivateDevices=false)
     DeviceAllow = [
       "/dev/nvidiactl rw"
       "/dev/nvidia0 rw"
