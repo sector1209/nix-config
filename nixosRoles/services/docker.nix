@@ -44,7 +44,10 @@
         data-root = "/mnt/diskyDocker/data-root";
         live-restore = false; # stop system hanging on shutdown
         ipv6 = false;
-        dns = [ "192.168.50.206" ];
+        dns = [
+          "192.168.50.206"
+          "192.168.50.97"
+        ];
         default-address-pools = [
           {
             base = "172.96.0.0/16";
