@@ -46,10 +46,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    wazuh-agent = {
-      url = "github:paulvictor/wazuh.nix";
-    };
-
     nix-secrets.url = "git+ssh://git@github.com-nix-secrets/sector1209/nix-secrets.git";
 
   };
