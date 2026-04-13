@@ -89,7 +89,6 @@
         group = "podman";
         mode = "u=rwx,g=rx,o=";
       }
-      "/var/lib/acme"
     ];
   };
 
