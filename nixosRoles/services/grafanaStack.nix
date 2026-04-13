@@ -27,7 +27,9 @@ let
   enabledExportersF =
     name: host:
     filterAttrs (
-      k: v: (k != "unifi-poller" && k != "unpoller" && k != "minio" && k != "tor") && (v.enable or false)
+      k: v:
+      (k != "unifi-poller" && k != "unpoller" && k != "minio" && k != "tor" && k != "rspamd")
+      && (v.enable or false)
     ) host.config.services.prometheus.exporters;
   enabledExporters = mapAttrs enabledExportersF tailnetHosts;
 
