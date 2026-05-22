@@ -193,11 +193,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1779371546,
-        "narHash": "sha256-4bczf3+kiwXzKZE9rbpyC5ERYj72O9MoA+aqOfue7p0=",
+        "lastModified": 1779456017,
+        "narHash": "sha256-rGWNgOz/mYeQA5jyoaQDND3Ip8WCGiADT+ghAk9tLzg=",
         "ref": "refs/heads/main",
-        "rev": "d7e86a5e9d84a55b9228e68d74048ac860de6352",
-        "revCount": 113,
+        "rev": "ff2904e7a451e54386c1dcb4b867a52643fb6ac5",
+        "revCount": 114,
         "type": "git",
         "url": "ssh://git@github.com-nix-secrets/sector1209/nix-secrets.git"
       },
@@ -276,12 +276,12 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1779259093,
-        "narHash": "sha256-7DKWmH23hL2eYdkxCKeqj2i+yljTKuU+3Nk1UPHOnxc=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "d99b013d5d1931ad77fe3912ed218170dec5d9a4",
-        "type": "github"
+        "lastModified": 1778869304,
+        "narHash": "sha256-30sZNZoA1cqF5JNO9fVX+wgiQYjB7HJqqJ4ztCDeBZE=",
+        "rev": "d233902339c02a9c334e7e593de68855ad26c4cb",
+        "revCount": 998534,
+        "type": "tarball",
+        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/nixpkgs-weekly/0.1.998534%2Brev-d233902339c02a9c334e7e593de68855ad26c4cb/019e3efc-e09a-7ff1-b05f-0c8f85ba7441/source.tar.gz"
       },
       "original": {
         "id": "nixpkgs",
