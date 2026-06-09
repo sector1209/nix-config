@@ -105,11 +105,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1780935377,
-        "narHash": "sha256-geCmxeKxlozqmj62ooNR7RWTs/UtD4dZ1IQRH51cqAo=",
+        "lastModified": 1781009359,
+        "narHash": "sha256-w/mZkRscTatf8NWyUstli8ROzM/eopxZzi0WRjoeYkU=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "301871cd96c005a410e8317e90b80d59ac312c4a",
+        "rev": "c58ead12efcac436afffa93a22099a5595eb4157",
         "type": "github"
       },
       "original": {
@@ -193,11 +193,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1780581125,
-        "narHash": "sha256-M8BzezzcEOUeEuB+p2YB6fbpkS413iRNOV7PYD0x5N8=",
+        "lastModified": 1781012126,
+        "narHash": "sha256-5sZmmXDkYfNkGNxFy9y3+X4UTIlV2oB37c91TZom/vY=",
         "ref": "refs/heads/main",
-        "rev": "c616d3648fe983591581d84709cf068de6bd54fb",
-        "revCount": 117,
+        "rev": "dc0644f61aa9a2caa5ed7b599a153adf9cff08f8",
+        "revCount": 118,
         "type": "git",
         "url": "ssh://git@github.com-nix-secrets/sector1209/nix-secrets.git"
       },
@@ -276,12 +276,12 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1780336545,
-        "narHash": "sha256-vhVhuXzFrIOfcssC/9hDHx7MHzDKjF3keHuREOQqQiQ=",
-        "rev": "4df1b885d76a54e1aa1a318f8d16fd6005b6401f",
-        "revCount": 1008784,
+        "lastModified": 1780930886,
+        "narHash": "sha256-rppURzHviaQN131F+nLiLdGfcb0uCd9gGP0E5+iw9MI=",
+        "rev": "8c3cede7ddc26bd659d2d383b5610efbd2c7a16e",
+        "revCount": 1012902,
         "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/nixpkgs-weekly/0.1.1008784%2Brev-4df1b885d76a54e1aa1a318f8d16fd6005b6401f/019e8725-c925-7ec1-8f35-3f9effcf169a/source.tar.gz"
+        "url": "https://api.flakehub.com/f/pinned/DeterminateSystems/nixpkgs-weekly/0.1.1012902%2Brev-8c3cede7ddc26bd659d2d383b5610efbd2c7a16e/019eab22-bd1e-7e40-b919-277db893c789/source.tar.gz"
       },
       "original": {
         "id": "nixpkgs",
