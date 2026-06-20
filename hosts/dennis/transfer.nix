@@ -6,6 +6,7 @@
   # Bind mount media dirs to /export/
   fileSystems."/export/diskyMedia" = {
     device = "/mnt/diskyMedia";
+    fsType = "btrfs";
     options = [ "bind" ];
   };
 
