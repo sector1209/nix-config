@@ -35,7 +35,7 @@
 
     # Set neovim as the default editor
     programs.neovim = {
-      enable = lib.mkForce true;
+      # enable = lib.mkForce true;
       defaultEditor = lib.mkForce true;
     };
 
