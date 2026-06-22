@@ -16,6 +16,7 @@
 
     environment.systemPackages = with pkgs; [
       nixos-anywhere
+      jq # Needed for nixos-anywhere script
       nh
       nixos-generators
       nixfmt-tree
