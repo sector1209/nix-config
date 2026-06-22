@@ -37,6 +37,10 @@
       url = "github:nix-community/impermanence";
     };
 
+    preservation = {
+      url = "github:nix-community/preservation";
+    };
+
     vscode-server = {
       url = "github:nix-community/nixos-vscode-server";
     };
@@ -90,6 +94,10 @@
       ])
       (mkNixos "frank" inputs.nixpkgs [
         inputs.disko.nixosModules.default
+      ])
+      (mkNixos "impermanence-testing" inputs.nixpkgs [
+        inputs.disko.nixosModules.default
+        inputs.preservation.nixosModules.default
       ])
       #      (mkNixos "generic-vm" inputs.nixpkgs [
       #	inputs.nixos-generators.nixosModules.all-formats
