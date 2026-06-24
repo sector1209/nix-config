@@ -87,11 +87,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1782051614,
-        "narHash": "sha256-xBRAhYLEXcjp8hM2tkkTTLb6PWU7VDxDoogl25g7Ezs=",
+        "lastModified": 1782154529,
+        "narHash": "sha256-mVdyS2SxbPGNHTJX4n4EUMT/S2BPyZJ/ZR2UhkJcSF4=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "d1ccd0721ec599866622665f3651e19e6e2d4c6a",
+        "rev": "af11a877f238208676b596a5b6c3f3d8dcf5a86b",
         "type": "github"
       },
       "original": {
@@ -147,11 +147,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1782067036,
-        "narHash": "sha256-YS7DgjXcVj5vFSWw12FHp1RR0oZGopviphxVj24LDa8=",
+        "lastModified": 1782168324,
+        "narHash": "sha256-gykhoYkIYnDcYUDVb9NiiWnbUN7st2HnPAJKA7we74I=",
         "ref": "refs/heads/main",
-        "rev": "6f27fc4533a4799c7c2b75e6b30149e3621b9869",
-        "revCount": 120,
+        "rev": "2038fefcd8f76f5228204feefa10948015ba609e",
+        "revCount": 125,
         "type": "git",
         "url": "ssh://git@github.com-nix-secrets/sector1209/nix-secrets.git"
       },
@@ -260,11 +260,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1782535326,
-        "narHash": "sha256-ZeRxu4yn6shd3SNF5ZUQb4r7BaVo1zBKMjRhfoNSBmw=",
+        "lastModified": 1781808408,
+        "narHash": "sha256-0sOb6OIaD/K1zHxBhpmlKvkADfe0n8+l4Jj2e1Q0r3w=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "714a5f8c4ead6b31148d829288440ed033ccc041",
+        "rev": "e8210c649915deed7080033cdbabcc19e40bb899",
         "type": "github"
       },
       "original": {

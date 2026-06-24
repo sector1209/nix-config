@@ -16,6 +16,11 @@ let
     ) [ ./hosts/${machineHostname}/home-manager-configuration.nix ];
     home-manager.backupFileExtension = "bak";
     home-manager.useUserPackages = userPackages;
+    home-manager.sharedModules = [
+      ({ config, ... }: {
+        sops.age.keyFile = "/home/${config.home.username}/.config/sops/age/keys.txt";
+      })
+    ];
   };
   overlays = [
     {
