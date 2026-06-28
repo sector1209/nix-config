@@ -65,9 +65,7 @@ in
 
     # Ensure the home .config directory has correct ownership
     systemd.tmpfiles.rules = lib.mkIf (
-      (config ? home-manager)
-      && (config.home-manager.users != { })
-      && (config.environment.persistence != { })
+      (config ? home-manager) && (config.home-manager.users != { })
     ) tmpfilesConfig;
 
     # Make sure Sops runs after systemd tmpfiles have been set up
