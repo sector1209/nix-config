@@ -17,7 +17,7 @@ let
   hmSopsUsers = lib.filter (user: config.home-manager.users.${user} ? sops) hmUsers;
 
   # Create a NixOS-sops config for each home-manager user with home-manager sops enabled
-  # Return an attribute set (sops configuration) for each item in the list hmSopsUsers
+  # Return an attribute set (sops configuration)
   mkSopsConfig = user: {
     "home-manager-sops-key-${user}" = {
       owner = "${user}";
@@ -25,12 +25,25 @@ let
     };
   };
 
-  # Create a list of NixOS sops configs
+  # Create a list of NixOS sops configs attribute sets
   hmSopsConfigsList = lib.map mkSopsConfig hmSopsUsers;
 
-  # Generate a sops.secret.* configuration for each user in hmUsers
+  # Generate a sops.secret.* configuration for each user in hmSopsUsers
   # Turn hmSopsConfigsList into an attribute set
   hmSecretsConfig = lib.mergeAttrsList hmSopsConfigsList;
+
+  # List the groups of all home-manager sops users
+  # Apply the function to each item in hmSopsUsers to create a new list
+  hmSopsUserGroups = lib.map (user: config.users.users.${user}.group) hmSopsUsers;
+
+  # Create a systemd tmpfiles rules config for each home-manager user with home-manager sops enabled
+  # Return a string (systemd tmpfiles config)
+  mkTmpfilesConfig =
+    user: group: "Z ${config.users.users.${user}.home}/.config 0755 ${user} ${group} - -";
+
+  # Create a list of Nixos Systemd tmpfiles rules configs
+  # Combine the lists hmSopsUsers and hmSopsUserGroups via the function mkTmpfilesConfig
+  tmpfilesConfig = lib.zipListsWith mkTmpfilesConfig hmSopsUsers hmSopsUserGroups;
 
 in
 {
@@ -45,9 +58,23 @@ in
 
   config = lib.mkIf config.roles.sops.enable {
 
-    sops.secrets = lib.mkIf (
-      (config ? home-manager) && (config.home-manager.users != { })
-    ) hmSecretsConfig;
+    sops = lib.mkIf ((config ? home-manager) && (config.home-manager.users != { })) {
+      secrets = hmSecretsConfig;
+      useSystemdActivation = lib.mkIf (config.environment.persistence != { }) true;
+    };
+
+    # Ensure the home .config directory has correct ownership
+    systemd.tmpfiles.rules = lib.mkIf (
+      (config ? home-manager)
+      && (config.home-manager.users != { })
+      && (config.environment.persistence != { })
+    ) tmpfilesConfig;
+
+    # Make sure Sops runs after systemd tmpfiles have been set up
+    systemd.services.sops-install-secrets = lib.mkIf (config.environment.persistence != { }) {
+      before = [ "systemd-tmpfiles-setup.service" ];
+      requires = [ "systemd-tmpfiles-setup.service" ];
+    };
 
   };
 }
