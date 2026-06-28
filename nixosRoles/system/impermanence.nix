@@ -21,34 +21,49 @@
     boot.loader.systemd-boot.enable = lib.mkForce true;
     boot.loader.efi.canTouchEfiVariables = true;
 
-    boot.initrd.postDeviceCommands = lib.mkAfter ''
-            mkdir /btrfs_tmp
-            mount /dev/root_vg/root /btrfs_tmp
-            if [[ -e /btrfs_tmp/root ]]; then
-      	mkdir -p /btrfs_tmp/old_roots
-      	timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
-      	mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$timestamp"
-            fi
+    boot.initrd.systemd.enable = true;
 
-            delete_subvolume_recursively() {
-      	IFS=$'\n'
-      	for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-      	  delete_subvolume_recursively "/btrfs_tmp/$i"
-      	done
-      	btrfs subvolume delete "$1"
-            }
+    boot.initrd.systemd.services.rollback = {
+      description = "Btrfs root rollback to fresh subvolume";
 
-            # Keep the newest, delete all others
-            keep=$(ls -1t /btrfs_tmp/old_roots | head -n1)
-            for i in /btrfs_tmp/old_roots/*; do
-      	if [[ "$(basename "$i")" != "$keep" ]]; then
-      	  delete_subvolume_recursively "$i"
-      	fi
-            done
+      wantedBy = [ "initrd.target" ];
+      after = [ "dev-root_vg-root.device" ];
+      before = [ "sysroot.mount" ];
 
-            btrfs subvolume create /btrfs_tmp/root
-            umount /btrfs_tmp
-    '';
+      unitConfig.DefaultDependencies = "no";
+
+      serviceConfig.Type = "oneshot";
+      script = ''
+        mkdir /btrfs_tmp
+        mount /dev/root_vg/root /btrfs_tmp
+
+        if [[ -e /btrfs_tmp/root ]]; then
+          mkdir -p /btrfs_tmp/old_roots
+          timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
+          mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$timestamp"
+        fi
+
+        delete_subvolume_recursively() {
+          IFS=$'\n'
+          for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+            delete_subvolume_recursively "/btrfs_tmp/$i"
+          done
+          btrfs subvolume delete "$1"
+        }
+
+        # Keep the newest old_root, delete all others
+        keep=$(ls -1t /btrfs_tmp/old_roots 2>/dev/null | head -n1)
+        for i in /btrfs_tmp/old_roots/*; do
+          [[ -e "$i" ]] || continue   # handle empty glob
+          if [[ "$(basename "$i")" != "$keep" ]]; then
+            delete_subvolume_recursively "$i"
+          fi
+        done
+
+        btrfs subvolume create /btrfs_tmp/root
+        umount /btrfs_tmp
+      '';
+    };
 
     fileSystems."/persist".neededForBoot = true;
     environment.persistence."/persist/system" = {
