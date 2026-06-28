@@ -67,7 +67,7 @@ in
 
       techDns = {
         authorizedKeys = [
-          " ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIvlyShlisUwt9NVXqOeO5z0ckvEF9/D3qGzK4vS47/P dan@backupB    ox "
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIvlyShlisUwt9NVXqOeO5z0ckvEF9/D3qGzK4vS47/P dan@backupBox"
         ];
         path = "${basePath}/techDns";
       };
