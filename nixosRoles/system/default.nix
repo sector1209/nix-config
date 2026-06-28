@@ -16,6 +16,7 @@
     ./nixvim.nix
     ./localisation.nix
     ./packages.nix
+    ./preservation.nix
     ./proxmoxContainer.nix
     ./qsv.nix
     ./sops.nix

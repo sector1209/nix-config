@@ -130,9 +130,7 @@
     '';
   };
 
-  # Configure persistence for fail2ban
-  environment.persistence."/persist/system" = {
-    hideMounts = true;
+  preservation.preserveAt."/persist" = {
     directories = [
       "/var/lib/fail2ban"
     ];

@@ -97,7 +97,6 @@
       ])
       (mkNixos "impermanence-testing" inputs.nixpkgs [
         inputs.disko.nixosModules.default
-        inputs.preservation.nixosModules.default
       ])
       #      (mkNixos "generic-vm" inputs.nixpkgs [
       #	inputs.nixos-generators.nixosModules.all-formats

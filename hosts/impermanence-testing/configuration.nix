@@ -8,8 +8,12 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    ./preservation.nix
+    # ./preservation.nix
   ];
+
+  roles = {
+    preservation.enable = true;
+  };
 
   networking.hostName = hostname;
 
