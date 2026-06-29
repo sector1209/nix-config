@@ -58,21 +58,18 @@ in
 
   config = lib.mkIf config.roles.sops.enable {
 
+    # Install home-manager sops secret if needed
     sops = {
-      secrets = lib.mkIf ((config ? home-manager) && (config.home-manager.users != { })) hmSecretsConfig;
-      useSystemdActivation = (
-        (config.environment.persistence != { }) || (config.preservation.enable == true)
-      );
+      secrets = lib.mkIf (hmSopsUsers != [ ]) hmSecretsConfig;
+      useSystemdActivation = config.preservation.enable;
     };
 
     # Ensure the home .config directory has correct ownership
-    systemd.tmpfiles.rules = lib.mkIf (
-      (config ? home-manager) && (config.home-manager.users != { })
-    ) tmpfilesConfig;
+    systemd.tmpfiles.rules = lib.mkIf (hmSopsUsers != [ ]) tmpfilesConfig;
 
     # Make sure Sops runs after systemd tmpfiles have been set up
     systemd.services.sops-install-secrets =
-      lib.mkIf ((config.environment.persistence != { }) || (config.preservation.enable == true))
+      lib.mkIf (config.preservation.enable && (hmSopsUsers != [ ]))
         {
           before = [ "systemd-tmpfiles-resetup.service" ];
           requires = [ "systemd-tmpfiles-resetup.service" ];
