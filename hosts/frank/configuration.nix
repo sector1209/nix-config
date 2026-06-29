@@ -2,6 +2,7 @@
 
 {
   lib,
+  pkgs,
   ...
 }:
 let
@@ -22,7 +23,10 @@ in
 
   roles = {
 
-    imperm.enable = true;
+    preservation = {
+      enable = true;
+      rootFs = "btrfs-rollback";
+    };
 
     nginx.enable = true;
 
@@ -68,6 +72,13 @@ in
       "/dev/nvidia0 rw"
     ];
   };
+
+  ### testing
+  services.fwupd.enable = true;
+
+  environment.systemPackages = [
+    pkgs.fwupd
+  ];
 
   system.stateVersion = "25.11";
 
