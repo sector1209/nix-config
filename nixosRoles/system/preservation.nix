@@ -83,11 +83,7 @@ in
     fileSystems."/persist".neededForBoot = true;
 
     # Prevent systemd-machine-id-commit.service error
-    systemd.suppressedSystemUnits =
-      lib.optionals (config.roles.preservation.rootFs == "btrfs-rollback")
-        [
-          "systemd-machine-id-commit.service"
-        ];
+    systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
 
     programs.fuse.userAllowOther = lib.mkIf (config.roles.preservation.rootFs == "btrfs-rollback") true;
 
