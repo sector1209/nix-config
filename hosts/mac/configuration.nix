@@ -24,7 +24,10 @@ in
 
   roles = {
 
-    imperm.enable = true;
+    preservation = {
+      enable = true;
+      rootFs = "btrfs-rollback";
+    };
 
   };
 

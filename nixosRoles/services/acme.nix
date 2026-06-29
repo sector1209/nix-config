@@ -37,9 +37,15 @@ in
       };
     };
 
-    environment.persistence."/persist/system".directories = lib.mkIf config.roles.imperm.enable [
-      "/var/lib/acme"
-    ];
+    preservation.preserveAt."/persist" = {
+      directories = [
+        {
+          directory = "/var/lib/acme";
+          user = "acme";
+          group = "acme";
+        }
+      ];
+    };
 
   };
 }

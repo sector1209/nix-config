@@ -74,8 +74,8 @@ in
     systemd.services.sops-install-secrets =
       lib.mkIf ((config.environment.persistence != { }) || (config.preservation.enable == true))
         {
-          before = [ "systemd-tmpfiles-setup.service" ];
-          requires = [ "systemd-tmpfiles-setup.service" ];
+          before = [ "systemd-tmpfiles-resetup.service" ];
+          requires = [ "systemd-tmpfiles-resetup.service" ];
         };
 
   };

@@ -20,13 +20,13 @@
   };
 
   # Define directories to persist between reboots
-  environment.persistence."/persist/system" = {
+  preservation.preserveAt."/persist" = {
     directories = [
       {
         directory = "/var/lib/www";
         user = "caddy";
         group = "blog";
-        mode = "u=rwx,g=rwx,o=";
+        mode = "770";
       }
     ];
   };

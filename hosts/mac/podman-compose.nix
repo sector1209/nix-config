@@ -74,22 +74,15 @@
     };
   };
 
-  # Define directories to persist between reboots
-  environment.persistence."/persist/system" = {
-    directories = [
-      {
-        directory = "/home/dan/.local/share/containers";
-        user = "dan";
-        group = "users";
-        mode = "u=rwx,g=rx,o=";
-      }
-      {
-        directory = "/home/podman/.local/share/containers";
-        user = "podman";
-        group = "podman";
-        mode = "u=rwx,g=rx,o=";
-      }
-    ];
+  preservation.preserveAt."/persist" = {
+    users.podman = {
+      directories = [
+        {
+          directory = ".local/share/containers";
+          mode = "750";
+        }
+      ];
+    };
   };
 
   users.mutableUsers = false;
@@ -102,6 +95,8 @@
       "systemd-journal"
     ];
   };
+
+  users.groups.podman.gid = 997;
 
   # User configuration for locked-down podman user
   users.users.podman = {

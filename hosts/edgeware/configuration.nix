@@ -19,7 +19,10 @@ in
 
   networking.hostName = hostname;
 
-  roles.preservation.enable = true;
+  roles.preservation = {
+    enable = true;
+    rootFs = "tmpfs";
+  };
 
   services.tailscale = {
     useRoutingFeatures = "server";
