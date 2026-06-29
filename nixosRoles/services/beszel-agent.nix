@@ -43,5 +43,9 @@ in
       environmentFile = config.sops.secrets.beszel-env-file.path;
     };
 
+    systemd.services.beszel-agent = lib.mkIf config.sops.useSystemdActivation {
+      after = [ "sops-install-secrets.service" ];
+    };
+
   };
 }
