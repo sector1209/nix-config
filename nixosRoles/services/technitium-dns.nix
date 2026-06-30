@@ -88,8 +88,9 @@ in
     users.users.technitium-dns-server = lib.mkIf config.preservation.enable {
       isSystemUser = true;
       group = "technitium-dns-server";
+      uid = 985;
     };
-    users.groups.technitium-dns-server = lib.mkIf config.preservation.enable { };
+    users.groups.technitium-dns-server = lib.mkIf config.preservation.enable { gid = 985; };
 
     preservation.preserveAt."/persist".directories = lib.mkIf config.preservation.enable [
       {
