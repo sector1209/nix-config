@@ -12,7 +12,10 @@ in
   ];
 
   roles = {
-    preservation.enable = true;
+    preservation = {
+      enable = true;
+      rootFs = "tmpfs";
+    };
   };
 
   networking.hostName = hostname;
