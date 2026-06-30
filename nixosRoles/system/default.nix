@@ -11,7 +11,6 @@
     ./fish.nix
     ./flakeSettings.nix
     ./fonts.nix
-    ./impermanence.nix
     ./networking.nix
     ./nixvim.nix
     ./localisation.nix
