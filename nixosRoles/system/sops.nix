@@ -68,12 +68,10 @@ in
     systemd.tmpfiles.rules = lib.mkIf (hmSopsUsers != [ ]) tmpfilesConfig;
 
     # Make sure Sops runs after systemd tmpfiles have been set up
-    systemd.services.sops-install-secrets =
-      lib.mkIf (config.preservation.enable && (hmSopsUsers != [ ]))
-        {
-          before = [ "systemd-tmpfiles-resetup.service" ];
-          requires = [ "systemd-tmpfiles-resetup.service" ];
-        };
+    systemd.services.sops-install-secrets = lib.mkIf ((config ? home-manager) && (hmSopsUsers != [ ])) {
+      before = [ "systemd-tmpfiles-resetup.service" ];
+      requires = [ "systemd-tmpfiles-resetup.service" ];
+    };
 
   };
 }
