@@ -2,7 +2,6 @@
 
 {
   lib,
-  pkgs,
   ...
 }:
 let
@@ -17,8 +16,6 @@ in
     #./docker.nix
   ];
 
-  boot.loader.systemd-boot.enable = true;
-
   networking.hostName = hostname;
 
   roles = {
@@ -27,8 +24,6 @@ in
       enable = true;
       rootFs = "btrfs-rollback";
     };
-
-    nginx.enable = true;
 
     technitium-dns = {
       enable = true;
@@ -72,13 +67,6 @@ in
       "/dev/nvidia0 rw"
     ];
   };
-
-  ### testing
-  services.fwupd.enable = true;
-
-  environment.systemPackages = [
-    pkgs.fwupd
-  ];
 
   system.stateVersion = "25.11";
 
