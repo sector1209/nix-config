@@ -60,12 +60,12 @@ in
 
     # Install home-manager sops secret if needed
     sops = {
-      secrets = lib.mkIf (hmSopsUsers != [ ]) hmSecretsConfig;
+      secrets = lib.mkIf (config ? home-manager) hmSecretsConfig;
       useSystemdActivation = config.preservation.enable;
     };
 
     # Ensure the home .config directory has correct ownership
-    systemd.tmpfiles.rules = lib.mkIf (hmSopsUsers != [ ]) tmpfilesConfig;
+    systemd.tmpfiles.rules = lib.mkIf (config ? home-manager) tmpfilesConfig;
 
     # Make sure Sops runs after systemd tmpfiles have been set up
     systemd.services.sops-install-secrets = lib.mkIf ((config ? home-manager) && (hmSopsUsers != [ ])) {
