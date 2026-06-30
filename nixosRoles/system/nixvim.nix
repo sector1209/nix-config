@@ -3,7 +3,6 @@
 {
   lib,
   config,
-  inputs,
   ...
 }:
 {
@@ -11,10 +10,6 @@
   options = {
     roles.nixvim.enable = lib.mkEnableOption "enables nixvim module";
   };
-
-  imports = [
-    inputs.nixvim.nixosModules.nixvim
-  ];
 
   config = lib.mkIf config.roles.nixvim.enable {
 

@@ -22,9 +22,12 @@
     #sops-nix.url = "github:Mic92/sops-nix";
 
     # Nixvim
+    nixvim-unstable = {
+      url = "github:nix-community/nixvim";
+    };
+
     nixvim = {
       url = "github:nix-community/nixvim/nixos-26.05";
-      #      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Disko
@@ -65,33 +68,44 @@
     mkMerge [
       (mkNixos "nixos-testing" inputs.nixpkgs-unstable [
         inputs.home-manager-unstable.nixosModules.home-manager
+        inputs.nixvim-unstable.nixosModules.nixvim
       ])
       (mkNixos "nixos-testing2" inputs.nixpkgs-unstable [
         inputs.home-manager-unstable.nixosModules.home-manager
+        inputs.nixvim-unstable.nixosModules.nixvim
       ])
       (mkNixos "technitium-dns" inputs.nixpkgs [
+        inputs.nixvim.nixosModules.nixvim
       ])
       (mkNixos "dennis" inputs.nixpkgs [
         inputs.home-manager.nixosModules.home-manager
+        inputs.nixvim.nixosModules.nixvim
       ])
       (mkNixos "charlie" inputs.nixpkgs-unstable [
         inputs.home-manager-unstable.nixosModules.home-manager
+        inputs.nixvim-unstable.nixosModules.nixvim
       ])
       (mkNixos "backupBox" inputs.nixpkgs [
+        inputs.nixvim.nixosModules.nixvim
       ])
       (mkNixos "metrics" inputs.nixpkgs-unstable [
+        inputs.nixvim-unstable.nixosModules.nixvim
       ])
       (mkNixos "mac" inputs.nixpkgs [
+        inputs.nixvim.nixosModules.nixvim
         inputs.disko.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
       ])
       (mkNixos "edgeware" inputs.nixpkgs [
+        inputs.nixvim.nixosModules.nixvim
         inputs.disko.nixosModules.default
       ])
       (mkNixos "frank" inputs.nixpkgs [
+        inputs.nixvim.nixosModules.nixvim
         inputs.disko.nixosModules.default
       ])
       (mkNixos "impermanence-testing" inputs.nixpkgs [
+        inputs.nixvim.nixosModules.nixvim
         inputs.disko.nixosModules.default
       ])
       #      (mkNixos "generic-vm" inputs.nixpkgs [
