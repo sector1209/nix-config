@@ -1,9 +1,10 @@
-{ ... }:
 {
-  roles = {
-    ssh.enable = true;
-    git.enable = true;
+  dan = {
+    roles = {
+      ssh.enable = true;
+      git.enable = true;
+    };
+    home.stateVersion = "24.11";
   };
 
-  home.stateVersion = "24.11";
 }

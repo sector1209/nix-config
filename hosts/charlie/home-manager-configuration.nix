@@ -1,4 +1,5 @@
-{ ... }:
 {
-  home.stateVersion = "24.11";
+  dan = {
+    home.stateVersion = "24.11";
+  };
 }

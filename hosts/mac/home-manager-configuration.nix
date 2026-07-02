@@ -1,5 +1,6 @@
-{ ... }:
 {
-  roles.git.enable = true;
-  home.stateVersion = "24.11";
+  dan = {
+    roles.git.enable = true;
+    home.stateVersion = "24.11";
+  };
 }

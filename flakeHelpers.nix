@@ -1,26 +1,21 @@
 inputs: self:
 let
-  homeManagerCfg = userPackages: extraImports: nixpkgsVersion: extraModules: machineHostname: {
+  homeManagerCfg = userPackages: extraImports: nixpkgsVersion: extraModules: machineHostName: {
     home-manager.useGlobalPkgs = false;
     home-manager.extraSpecialArgs = {
       inherit inputs;
       secrets = import inputs.nix-secrets;
     };
-    home-manager.users.dan.imports = [
-      ./homeManagerRoles/default.nix
-    ]
-    ++ extraImports
-    ++ nixpkgsVersion.lib.optionals (
-      (nixpkgsVersion.lib.elem inputs.home-manager-unstable.nixosModules.home-manager extraModules)
-      || (nixpkgsVersion.lib.elem inputs.home-manager.nixosModules.home-manager extraModules)
-    ) [ ./hosts/${machineHostname}/home-manager-configuration.nix ];
-    home-manager.backupFileExtension = "bak";
-    home-manager.useUserPackages = userPackages;
     home-manager.sharedModules = [
       ({ config, ... }: {
         sops.age.keyFile = "/home/${config.home.username}/.config/sops/age/keys.txt";
       })
-    ];
+      ./homeManagerRoles/default.nix
+    ]
+    ++ extraImports;
+    home-manager.users = import ./hosts/${machineHostName}/home-manager-configuration.nix;
+    home-manager.backupFileExtension = "bak";
+    home-manager.useUserPackages = userPackages;
   };
   overlays = [
     {
@@ -47,26 +42,26 @@ let
 in
 {
 
-  mkNixos = machineHostname: nixpkgsVersion: extraModules: rec {
-    nixosConfigurations.${machineHostname} = nixpkgsVersion.lib.nixosSystem {
+  mkNixos = machineHostName: nixpkgsVersion: extraModules: rec {
+    nixosConfigurations.${machineHostName} = nixpkgsVersion.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {
         inherit inputs self;
         secrets = import inputs.nix-secrets;
       };
       modules = [
-        ./hosts/${machineHostname}/configuration.nix
+        ./hosts/${machineHostName}/configuration.nix
         ./nixosRoles/default.nix
       ]
       ++ extraModules
       ++ nixpkgsVersion.lib.optionals (
         (nixpkgsVersion.lib.elem inputs.home-manager-unstable.nixosModules.home-manager extraModules)
         || (nixpkgsVersion.lib.elem inputs.home-manager.nixosModules.home-manager extraModules)
-      ) [ (homeManagerCfg false [ ] nixpkgsVersion extraModules machineHostname) ]
+      ) [ (homeManagerCfg false [ ] nixpkgsVersion extraModules machineHostName) ]
       ++
         nixpkgsVersion.lib.optionals
           (nixpkgsVersion.lib.elem inputs.disko.nixosModules.default extraModules)
-          [ (import ./hosts/${machineHostname}/disko.nix) ]
+          [ (import ./hosts/${machineHostName}/disko.nix) ]
       ++ overlays;
     };
   };
