@@ -28,31 +28,27 @@ in
     # Configure authentication for git repos
     programs.ssh = {
       enable = true;
-      matchBlocks = {
+      settings = {
         "dan" = lib.hm.dag.entryBefore [ "deploy" ] {
-          match = "user dan";
-          hostname = "%h";
-          user = "dan";
-          identityFile = [
+          header = "Match user dan";
+          HostName = "%h";
+          User = "dan";
+          IdentityFile = [
             config.sops.secrets."keys/nixos-dan-key".path
           ];
-          extraOptions = {
-            "PreferredAuthentications" = "publickey";
-            "AddKeysToAgent" = "yes";
-          };
+          PreferredAuthentications = "publickey";
+          AddKeysToAgent = "yes";
         };
         "deploy" = lib.hm.dag.entryAnywhere {
-          match = "user deploy";
-          hostname = "%h";
-          user = "deploy";
-          identityFile = [
+          header = "Match user deploy";
+          HostName = "%h";
+          User = "deploy";
+          IdentityFile = [
             config.sops.secrets."keys/nixos-deploy-key".path
           ];
-          extraOptions = {
-            "PreferredAuthentications" = "publickey";
-            "AddKeysToAgent" = "yes";
-            "ForwardAgent" = "yes";
-          };
+          PreferredAuthentications = "publickey";
+          AddKeysToAgent = "yes";
+          ForwardAgent = "yes";
         };
       };
     };

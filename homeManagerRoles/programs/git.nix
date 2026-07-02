@@ -52,46 +52,38 @@ in
     # Configure authentication for git repos
     programs.ssh = {
       enable = true;
-      matchBlocks = {
+      settings = {
         "github.com" = lib.hm.dag.entryBefore [ "dan" ] {
-          hostname = "github.com";
-          user = "git";
-          identityFile = [
+          HostName = "github.com";
+          User = "git";
+          IdentityFile = [
             config.sops.secrets."keys/nix-config-repo-key".path
           ];
-          extraOptions = {
-            "PreferredAuthentications" = "publickey";
-          };
+          PreferredAuthentications = "publickey";
         };
         "github.com-nix-secrets" = lib.hm.dag.entryBefore [ "dan" ] {
-          hostname = "github.com";
-          user = "git";
-          identityFile = [
+          HostName = "github.com";
+          User = "git";
+          IdentityFile = [
             config.sops.secrets."keys/nix-secrets-repo-key".path
           ];
-          extraOptions = {
-            "PreferredAuthentications" = "publickey";
-          };
+          PreferredAuthentications = "publickey";
         };
         "github.com-composes" = lib.hm.dag.entryBefore [ "dan" ] {
-          hostname = "github.com";
-          user = "git";
-          identityFile = [
+          HostName = "github.com";
+          User = "git";
+          IdentityFile = [
             config.sops.secrets."keys/composes-repo-key".path
           ];
-          extraOptions = {
-            "PreferredAuthentications" = "publickey";
-          };
+          PreferredAuthentications = "publickey";
         };
         "github.com-hugo-website" = lib.hm.dag.entryBefore [ "dan" ] {
-          hostname = "github.com";
-          user = "git";
-          identityFile = [
+          HostName = "github.com";
+          User = "git";
+          IdentityFile = [
             config.sops.secrets."keys/hugo-website-repo-key".path
           ];
-          extraOptions = {
-            "PreferredAuthentications" = "publickey";
-          };
+          PreferredAuthentications = "publickey";
         };
       };
     };
