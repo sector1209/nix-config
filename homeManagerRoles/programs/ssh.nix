@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  osConfig,
   ...
 }:
 let
@@ -28,31 +29,43 @@ in
     # Configure authentication for git repos
     programs.ssh = {
       enable = true;
-      matchBlocks = {
+      enableDefaultConfig = false;
+      settings = {
+        # Default config
+        "*" = {
+          ForwardAgent = false;
+          AddKeysToAgent = "no";
+          Compression = false;
+          ServerAliveInterval = 0;
+          ServerAliveCountMax = 3;
+          HashKnownHosts = false;
+          UserKnownHostsFile = "~/.ssh/known_hosts";
+          ControlMaster = "no";
+          ControlPath = "~/.ssh/master-%r@%n:%p";
+          ControlPersist = "no";
+        };
+      }
+      // lib.optionalAttrs osConfig.roles.deployMachine.enable {
         "dan" = lib.hm.dag.entryBefore [ "deploy" ] {
-          match = "user dan";
-          hostname = "%h";
-          user = "dan";
-          identityFile = [
+          header = "Match user dan";
+          HostName = "%h";
+          User = "dan";
+          IdentityFile = [
             config.sops.secrets."keys/nixos-dan-key".path
           ];
-          extraOptions = {
-            "PreferredAuthentications" = "publickey";
-            "AddKeysToAgent" = "yes";
-          };
+          PreferredAuthentications = "publickey";
+          AddKeysToAgent = "yes";
         };
         "deploy" = lib.hm.dag.entryAnywhere {
-          match = "user deploy";
-          hostname = "%h";
-          user = "deploy";
-          identityFile = [
+          header = "Match user deploy";
+          HostName = "%h";
+          User = "deploy";
+          IdentityFile = [
             config.sops.secrets."keys/nixos-deploy-key".path
           ];
-          extraOptions = {
-            "PreferredAuthentications" = "publickey";
-            "AddKeysToAgent" = "yes";
-            "ForwardAgent" = "yes";
-          };
+          PreferredAuthentications = "publickey";
+          AddKeysToAgent = "yes";
+          ForwardAgent = "yes";
         };
       };
     };
