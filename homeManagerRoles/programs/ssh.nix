@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  osConfig,
   ...
 }:
 let
@@ -30,6 +31,21 @@ in
       enable = true;
       enableDefaultConfig = false;
       settings = {
+        # Default config
+        "*" = {
+          ForwardAgent = false;
+          AddKeysToAgent = "no";
+          Compression = false;
+          ServerAliveInterval = 0;
+          ServerAliveCountMax = 3;
+          HashKnownHosts = false;
+          UserKnownHostsFile = "~/.ssh/known_hosts";
+          ControlMaster = "no";
+          ControlPath = "~/.ssh/master-%r@%n:%p";
+          ControlPersist = "no";
+        };
+      }
+      // lib.optionalAttrs osConfig.roles.deployMachine.enable {
         "dan" = lib.hm.dag.entryBefore [ "deploy" ] {
           header = "Match user dan";
           HostName = "%h";
@@ -51,20 +67,6 @@ in
           AddKeysToAgent = "yes";
           ForwardAgent = "yes";
         };
-        # Default config
-        "*" = {
-          ForwardAgent = false;
-          AddKeysToAgent = "no";
-          Compression = false;
-          ServerAliveInterval = 0;
-          ServerAliveCountMax = 3;
-          HashKnownHosts = false;
-          UserKnownHostsFile = "~/.ssh/known_hosts";
-          ControlMaster = "no";
-          ControlPath = "~/.ssh/master-%r@%n:%p";
-          ControlPersist = "no";
-        };
-
       };
     };
 

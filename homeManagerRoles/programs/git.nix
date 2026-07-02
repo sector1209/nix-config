@@ -16,20 +16,19 @@ let
     };
   };
 
-  sopsSecrets = lib.mergeAttrsList (builtins.map mkSopsConfig cfg.repos);
+  sopsSecrets = lib.mergeAttrsList (map mkSopsConfig cfg.repos);
 
   mkMatchBlocks = repo: {
-    "github.com-${repo}" = lib.hm.dag.entryBefore [ "dan" ] {
-      HostName = "github.com";
-      User = "git";
-      IdentityFile = [
-        config.sops.secrets."keys/${repo}-repo-key".path
-      ];
-      PreferredAuthentications = "publickey";
-    };
+    header = "Host github.com-${repo}";
+    HostName = "github.com";
+    User = "git";
+    IdentityFile = [
+      config.sops.secrets."keys/${repo}-repo-key".path
+    ];
+    PreferredAuthentications = "publickey";
   };
 
-  matchBlocks = lib.mergeAttrsList (builtins.map mkMatchBlocks cfg.repos);
+  matchBlocks = lib.hm.dag.entriesBefore "git-repo" [ "dan" "deploy" ] (map mkMatchBlocks cfg.repos);
 
 in
 {
@@ -54,9 +53,7 @@ in
       ssh.enable = true;
     };
 
-    sops.secrets = sopsSecrets;
-
-    # Enable and configure git
+    # Enable and configure Git
     programs.git = {
       enable = true;
       settings = {
@@ -73,10 +70,10 @@ in
       };
     };
 
-    # Configure authentication for git repos
-    programs.ssh = {
-      settings = matchBlocks;
-    };
+    sops.secrets = sopsSecrets;
+
+    # Configure SSH authentication for Git repos
+    programs.ssh.settings = matchBlocks;
 
   };
 }
