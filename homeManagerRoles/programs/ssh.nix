@@ -28,6 +28,7 @@ in
     # Configure authentication for git repos
     programs.ssh = {
       enable = true;
+      enableDefaultConfig = false;
       settings = {
         "dan" = lib.hm.dag.entryBefore [ "deploy" ] {
           header = "Match user dan";
@@ -50,6 +51,20 @@ in
           AddKeysToAgent = "yes";
           ForwardAgent = "yes";
         };
+        # Default config
+        "*" = {
+          ForwardAgent = false;
+          AddKeysToAgent = "no";
+          Compression = false;
+          ServerAliveInterval = 0;
+          ServerAliveCountMax = 3;
+          HashKnownHosts = false;
+          UserKnownHostsFile = "~/.ssh/known_hosts";
+          ControlMaster = "no";
+          ControlPath = "~/.ssh/master-%r@%n:%p";
+          ControlPersist = "no";
+        };
+
       };
     };
 
