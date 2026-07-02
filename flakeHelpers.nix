@@ -7,9 +7,6 @@ let
       secrets = import inputs.nix-secrets;
     };
     home-manager.sharedModules = [
-      ({ config, ... }: {
-        sops.age.keyFile = "/home/${config.home.username}/.config/sops/age/keys.txt";
-      })
       ./homeManagerRoles/default.nix
     ]
     ++ extraImports;
