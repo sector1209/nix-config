@@ -15,7 +15,6 @@
   config = lib.mkIf config.roles.packages.enable {
     environment.systemPackages = with pkgs; [
       vim
-      neovim
       dig
       # gitFull includes libsecret
       gitFull
@@ -31,12 +30,6 @@
 
     programs = {
       nix-ld.enable = true;
-    };
-
-    # Set neovim as the default editor
-    programs.neovim = {
-      # enable = lib.mkForce true;
-      defaultEditor = lib.mkForce true;
     };
 
     programs.tmux = {

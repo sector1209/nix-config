@@ -15,6 +15,7 @@
 
     programs.nixvim = {
       enable = true;
+      defaultEditor = lib.mkDefault true;
 
       colorschemes.everforest.enable = true;
 
