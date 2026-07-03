@@ -27,6 +27,8 @@
       gcc # Needed for deadnix pre-commit plugin
       nixd
       nil
+      nixfmt
+      shfmt
     ];
 
   };
