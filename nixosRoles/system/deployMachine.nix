@@ -6,10 +6,19 @@
   config,
   ...
 }:
+let
+  cfg = config.roles.deployMachine;
+in
 {
 
   options = {
-    roles.deployMachine.enable = lib.mkEnableOption "enables deployment machine module";
+    roles.deployMachine = {
+      enable = lib.mkEnableOption "enables deployment machine module";
+      devUser = lib.mkOption {
+        type = lib.types.str;
+        default = "dan";
+      };
+    };
   };
 
   config = lib.mkIf config.roles.deployMachine.enable {
@@ -29,6 +38,10 @@
       nil
       nixfmt
       shfmt
+    ];
+
+    preservation.preserveAt."/persist".users.${cfg.devUser}.directories = [
+      ".zed_server"
     ];
 
   };
