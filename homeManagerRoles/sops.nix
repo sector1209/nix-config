@@ -27,8 +27,6 @@ in
     # Testing if she works
     sops.secrets.example-key = { };
 
-    sops.age.keyFile = "/home/${config.home.username}/.config/sops/age/keys.txt";
-
   };
 
 }
