@@ -24,12 +24,6 @@
       ];
     };
 
-    #    fileSystems."/mnt/diskyBizShare" = {
-    #      device = "192.168.50.105:/export/diskyBiz";
-    #      fsType = "nfs";
-    #      options = [ "rw" ];
-    #    };
-
     roles.nginx.enable = true;
     roles.qsv.enable = true;
 
