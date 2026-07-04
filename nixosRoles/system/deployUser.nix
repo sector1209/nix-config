@@ -4,6 +4,7 @@
   pkgs,
   lib,
   config,
+  secrets,
   ...
 }:
 let
@@ -18,11 +19,6 @@ in
   };
 
   config = lib.mkIf config.roles.${configName}.enable {
-
-    sops.secrets = {
-      "keys/nixos-deploy-key" = { };
-      "keys/nixos-deploy-key-pub" = { };
-    };
 
     # Create deploy group
     users.groups.deploy = { };
@@ -39,7 +35,7 @@ in
       hashedPassword = null;
       # Add your public SSH key here
       openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE75I9p0QcSrZT6nJ1kZ+R+OvRQyyUr09xqsMbo8y7zF dan@nixos-testing"
+        secrets.nixos-deploy-key-pub
       ];
     };
 
