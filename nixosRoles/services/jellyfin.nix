@@ -15,7 +15,13 @@
     fileSystems."/mnt/diskyMediaShare" = {
       device = "192.168.50.105:/export/diskyMedia";
       fsType = "nfs";
-      options = [ "rw" ];
+      options = [
+        "rw"
+        "vers=3"
+        "proto=tcp"
+        "nolock"
+        "_netdev"
+      ];
     };
 
     #    fileSystems."/mnt/diskyBizShare" = {
