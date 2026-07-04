@@ -2,6 +2,7 @@
 
 {
   lib,
+  pkgs,
   config,
   ...
 }:
@@ -37,8 +38,29 @@
         lsp = {
           enable = true;
           servers = {
-            nixd.enable = true;
-            docker_compose_language_service.enable = true;
+            nixd = {
+              enable = true;
+              settings = {
+                formatting.command = [ "nixfmt" ];
+                nixpkgs.expr = ''
+                  let h = builtins.replaceStrings ["\n"] [""] (builtins.readFile /etc/hostname);
+                  in (builtins.getFlake (builtins.toString ./.)).nixosConfigurations.''${h}.pkgs
+                '';
+                options = {
+                  nixos.expr = ''
+                    let h = builtins.replaceStrings ["\n"] [""] (builtins.readFile /etc/hostname);
+                    in (builtins.getFlake (builtins.toString ./.)).nixosConfigurations.''${h}.options
+                  '';
+                  home_manager.expr = ''
+                    let h = builtins.replaceStrings ["\n"] [""] (builtins.readFile /etc/hostname);
+                    in (builtins.getFlake (builtins.toString ./.)).nixosConfigurations.''${h}.options.home-manager.users.type.getSubOptions []
+                  '';
+                };
+              };
+            };
+            docker_compose_language_service.enable = (
+              config.virtualisation.docker.enable || config.virtualisation.docker.rootless.enable
+            );
           };
         };
 
@@ -57,5 +79,6 @@
       };
       extraConfigLua = "vim.g.clipboard = 'osc52'\nvim.o.clipboard = 'unnamedplus'\nvim.o.expandtab = true";
     };
+    environment.systemPackages = [ pkgs.nixd ];
   };
 }
