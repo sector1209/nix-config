@@ -28,10 +28,6 @@
       htop
     ];
 
-    programs = {
-      nix-ld.enable = true;
-    };
-
     programs.tmux = {
       enable = true;
       # Remove grey highlighting from comments when using neovim inside tmux

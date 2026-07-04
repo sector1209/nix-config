@@ -40,6 +40,11 @@ in
       shfmt
     ];
 
+    # Allow Zed Editor remote server to function properly
+    programs = {
+      nix-ld.enable = true;
+    };
+
     preservation.preserveAt."/persist".users.${cfg.devUser}.directories = [
       ".zed_server"
     ];
