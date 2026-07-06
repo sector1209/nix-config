@@ -33,6 +33,9 @@ in
       extraGroups = [ "wheel" ];
       # Disable password login
       hashedPassword = null;
+      # Needed for SSH agent forwarding
+      home = "/var/deploy";
+      createHome = true;
       # Add your public SSH key here
       openssh.authorizedKeys.keys = [
         secrets.nixos-deploy-key-pub
@@ -41,55 +44,6 @@ in
 
     # Disable passwordless sudo generally
     security.sudo.wheelNeedsPassword = lib.mkForce true;
-
-    # Allow sudo access without password for the deploy user
-    security.sudo.extraRules = [
-      {
-        users = [ "deploy" ];
-        commands = [
-          {
-            command = "ALL";
-            options = [ "NOPASSWD" ];
-          }
-        ];
-      }
-    ];
-    #    security.sudo.extraRules = [{
-    #      users = [ "deploy" ];
-    #      commands = [{
-    #	command = "ALL";
-    # Attempt to limit passwordless sudo permissions to rebuild commands
-    #	command = "/run/current-system/sw/bin/systemd-run";
-    #	command = "/run/current-system/sw/bin/nixos-rebuild";
-    #	options = [ "NOPASSWD" ];
-    #      }];
-    #      commands = [
-    #        {
-    #          command = "/nix/store/*/bin/switch-to-configuration";
-    #          options = [ "NOPASSWD" ];
-    #        }
-    #        {
-    #          command = "/run/current-system/sw/bin/nix-store";
-    #          options = [ "NOPASSWD" ];
-    #        }
-    #        {
-    #          command = "/run/current-system/sw/bin/nix-env";
-    #          options = [ "NOPASSWD" ];
-    #        }
-    #        {
-    #          command = ''/bin/sh -c "readlink -e /nix/var/nix/profiles/system || readlink -e /run/current-system"'';
-    #          options = [ "NOPASSWD" ];
-    #        }
-    #        {
-    #          command = "/run/current-system/sw/bin/nix-collect-garbage";
-    #          options = [ "NOPASSWD" ];
-    #        }
-    #	{
-    #	  command = "/run/current-system/sw/bin/nixos-rebuild";
-    #	  options = [ "NOPASSWD" ];
-    #	}
-    #      ];
-    #    }];
 
     programs.ssh.startAgent = true;
 
