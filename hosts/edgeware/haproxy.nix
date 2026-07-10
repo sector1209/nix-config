@@ -1,4 +1,4 @@
-{ ... }:
+{ secrets, ... }:
 {
 
   networking.firewall.allowedTCPPorts = [
@@ -139,7 +139,7 @@
   # Configure fail2ban
   services.fail2ban = {
     enable = true;
-    ignoreIP = [ "100.0.0.0/8" ];
+    ignoreIP = [ "100.0.0.0/8" ] ++ secrets.fail2ban-whitelist;
     bantime-increment = {
       enable = true;
       overalljails = true;

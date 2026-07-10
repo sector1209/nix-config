@@ -128,11 +128,11 @@
         "sops-nix": "sops-nix"
       },
       "locked": {
-        "lastModified": 1783429798,
-        "narHash": "sha256-YwIrLbrV0YJIQlwn4/ln/zJzngd0UttCxRFTmj252j8=",
+        "lastModified": 1783721932,
+        "narHash": "sha256-9fzxMAp7EPQ4w8l83Kg02hah24O1cbsqWu3XUMY7y6M=",
         "ref": "refs/heads/main",
-        "rev": "90a1cac83156c26350cceee46ffb9ec5b88341b7",
-        "revCount": 141,
+        "rev": "2dbeeef665c57f5f2241ef37a72e0fd59b505e0f",
+        "revCount": 143,
         "type": "git",
         "url": "ssh://git@github.com-nix-secrets/sector1209/nix-secrets.git"
       },
