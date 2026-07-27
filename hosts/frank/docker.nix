@@ -1,13 +1,14 @@
 {
   lib,
+  pkgs,
   ...
 }:
 {
 
-  #sops.secrets = {
-  #  "borg/diskyDocker-pass" = { };
-  #  "borg/diskyDocker-priv" = { };
-  #};
+  environment.systemPackages = with pkgs; [
+    docker-compose-language-service
+    custom.docker-netshoot
+  ];
 
   users.users.dan = {
     extraGroups = lib.mkDefault [ "docker" ];
@@ -19,10 +20,19 @@
     enable = true;
     setSocketVariable = true; # sets DOCKER_HOST variable to the rootless Docker instance for normal users by default
     daemon.settings = {
-      #    data-root = "/mnt/diskyDocker/data-root";
+      data-root = "/mnt/dataRoot/docker/data-root";
       live-restore = false; # stop system hanging on shutdown
       ipv6 = false;
-      dns = [ "192.168.50.206" ];
+      dns = [
+        "192.168.50.206"
+        "192.168.50.97"
+      ];
+      default-address-pools = [
+        {
+          base = "172.96.0.0/16";
+          size = 24;
+        }
+      ];
     };
   };
 
@@ -30,15 +40,26 @@
   environment.shellAliases = {
     dc = "docker compose";
     dcupdate = "docker compose down && docker compose pull && docker compose up -d --force-recreate --remove-orphans";
-    cdcompdir = "cd /mnt/diskyDocker/composes";
+    cdcompdir = "cd /var/lib/composes";
     caddyreload = "docker exec -it caddy caddy reload --config /etc/caddy/Caddyfile";
     gluetuntest = "docker run --rm --network=container:gluetun alpine:3.18 sh -c 'apk add wget && wget -qO- https://ipinfo.io'";
   };
 
   boot.kernel.sysctl = {
     "net.ipv4.ip_unprivileged_port_start" = 80; # allow docker to assign port 80 (under 1024) when running rootless
+    "net.ipv4.ip_forward" = 1;
   };
 
   boot.kernelModules = [ "br_netfilter" ];
+
+  preservation.preserveAt."/persist" = {
+    directories = [
+      {
+        directory = "/var/lib/composes";
+        user = "dan";
+        group = "users";
+      }
+    ];
+  };
 
 }

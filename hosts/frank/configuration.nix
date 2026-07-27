@@ -13,7 +13,7 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    #./docker.nix
+    ./docker.nix
   ];
 
   networking.hostName = hostname;

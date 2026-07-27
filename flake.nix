@@ -101,6 +101,7 @@
         inputs.disko.nixosModules.default
       ])
       (mkNixos "frank" inputs.nixpkgs [
+        inputs.home-manager.nixosModules.home-manager
         inputs.nixvim.nixosModules.nixvim
         inputs.disko.nixosModules.default
       ])
