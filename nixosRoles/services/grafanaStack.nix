@@ -4,6 +4,7 @@
   lib,
   config,
   self,
+  secrets,
   ...
 }:
 let
@@ -68,6 +69,9 @@ in
       grafana-secret_key = {
         owner = config.users.users.grafana.name;
       };
+      watchtower_http_api_token = {
+        owner = config.users.users.prometheus.name;
+      };
     };
 
     services.grafana = {
@@ -101,17 +105,33 @@ in
       # https://xeiaso.net/blog/prometheus-grafana-loki-nixos-2020-11-20
       enable = true;
       port = 9011;
-      scrapeConfigs = autogenScrapeConfigs; # ++ [
-      #      {
-      #        job_name = "proxmox";
-      #        static_configs = [
-      #		 { targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" ]; }
-      #            { targets = [ "workstation:${toString config.services.prometheus.exporters.smartctl.port}" ]; }
-      #            { targets = [ "workstation:${toString config.services.prometheus.exporters.postgres.port}" ]; }
-      #            { targets = [ "workstation:${toString config.services.prometheus.exporters.zfs.port}" ]; }
-      #        ];
-      #      }
-      #    ];
+      checkConfig = "syntax-only";
+      scrapeConfigs = autogenScrapeConfigs ++ [
+        {
+          job_name = "photon";
+          static_configs = [
+            { targets = [ "frank:2322" ]; }
+          ];
+        }
+        {
+          job_name = "watchtower";
+          scrape_interval = "15s";
+          metrics_path = "/v1/metrics";
+          scheme = "https";
+          bearer_token_file = config.sops.secrets.watchtower_http_api_token.path;
+          static_configs = [
+            { targets = [ "watchtower.d${secrets.domain-name}" ]; }
+          ];
+        }
+        #      {
+        #        job_name = "proxmox";
+        #        static_configs = [
+        #		 { targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" ]; }
+        #            { targets = [ "workstation:${toString config.services.prometheus.exporters.smartctl.port}" ]; }
+        #            { targets = [ "workstation:${toString config.services.prometheus.exporters.postgres.port}" ]; }
+        #        ];
+        #      }
+      ];
     };
 
     services.loki = {

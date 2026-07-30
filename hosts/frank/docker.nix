@@ -62,4 +62,7 @@
     ];
   };
 
+  # Open port for Photon Prometheus metrics
+  networking.firewall.allowedTCPPorts = [ 2322 ];
+
 }
