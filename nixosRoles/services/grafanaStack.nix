@@ -189,12 +189,22 @@ in
 
     roles.nginx.enable = true;
 
-    services.nginx.virtualHosts."grafana.danmail.me" = {
-      forceSSL = true;
-      enableACME = true;
-      acmeRoot = null;
-      locations."/" = {
-        proxyPass = "http://localhost:9010";
+    services.nginx.virtualHosts = {
+      "grafana.danmail.me" = {
+        forceSSL = true;
+        enableACME = true;
+        acmeRoot = null;
+        locations."/" = {
+          proxyPass = "http://localhost:9010";
+        };
+      };
+      "prometheus.danmail.me" = {
+        forceSSL = true;
+        enableACME = true;
+        acmeRoot = null;
+        locations."/" = {
+          proxyPass = "http://localhost:9011";
+        };
       };
     };
 
