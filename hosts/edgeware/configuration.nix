@@ -14,14 +14,17 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    ./edge-proxy.nix
+    # ./edge-proxy.nix
   ];
 
   networking.hostName = hostname;
 
-  roles.preservation = {
-    enable = true;
-    rootFs = "tmpfs";
+  roles = {
+    preservation = {
+      enable = true;
+      rootFs = "tmpfs";
+    };
+    edgeProxy.enable = true;
   };
 
   services.tailscale = {

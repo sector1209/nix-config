@@ -9,6 +9,7 @@
     ./beszel-hub.nix
     ./borgbackupServer.nix
     ./docker.nix
+    ./edgeProxy.nix
     ./flakeAutoUpdateSvr.nix
     ./glances.nix
     ./gotify.nix
