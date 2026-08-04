@@ -10,11 +10,92 @@ let
 
   roleName = "edgeProxy";
 
+  cfg = config.roles.${roleName};
+
+  # Get each instance of cfg.virtualHosts
+  virtualHosts = builtins.attrNames cfg.virtualHosts;
+
+  # Make a list pairing virtualHost to destination
+  mapList = lib.map (
+    vHost:
+    (
+      "${vHost} ${
+        if cfg.virtualHosts.${vHost}.useUpstream then
+          (lib.concatStringsSep "_" [
+            (builtins.elemAt (lib.strings.splitString ":" cfg.virtualHosts.${vHost}.destination) 0)
+            "upstream"
+          ])
+        else
+          (cfg.virtualHosts.${vHost}.destination)
+      };"
+    )
+  ) virtualHosts;
+
+  # Make the map of SRI destination to backend
+  mkMap = lib.concatLines [
+    "map $ssl_preread_server_name $https_backend {"
+    (lib.trim (lib.concatLines mapList))
+    "}"
+  ];
+
+  # Filter virtualHosts with useUpstream
+  filteredVirtualHosts = lib.filter (vHost: cfg.virtualHosts.${vHost}.useUpstream) virtualHosts;
+
+  # Get the destination of each filtered host
+  destinationList = lib.lists.unique (
+    lib.map (vHost: "${cfg.virtualHosts.${vHost}.destination}") filteredVirtualHosts
+  );
+
+  # Create an upstream block for each filtered virtualHost
+  upstreamBlocks = lib.map (
+    destination:
+    (lib.concatLines (
+      let
+        splitDestination = builtins.elemAt (lib.strings.splitString ":" destination) 0;
+      in
+      [
+        "upstream ${splitDestination}_upstream {"
+        "  server ${destination};"
+        "}"
+      ]
+    ))
+  ) destinationList;
+
+  # Make the upstream blocks
+  mkUpstreamBlocks = lib.concatLines upstreamBlocks;
+
 in
 {
 
   options = {
-    roles.${roleName}.enable = lib.mkEnableOption "enables ${roleName} role";
+    roles.${roleName} = {
+      enable = lib.mkEnableOption "enables ${roleName} role";
+      virtualHosts = lib.mkOption {
+        type = lib.types.attrsOf (
+          lib.types.submodule (
+            { ... }:
+            {
+              options = {
+                destination = lib.mkOption {
+                  type = lib.types.str;
+                  description = ''
+                    Backend target the connection is proxied to. Include the port.
+                  '';
+                  example = "host:1234";
+                };
+                useUpstream = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = ''
+                    Proxy to the upstream server instead of the destination.
+                  '';
+                };
+              };
+            }
+          )
+        );
+      };
+    };
   };
 
   config = lib.mkIf config.roles.${roleName}.enable {
@@ -35,17 +116,12 @@ in
         preread_timeout 5s;
 
         #---------------------------------------------------------------------
-        # HTTPS / SNI-based routing (Tailscale backend "mac")
+        # HTTPS / SNI-based routing
         #---------------------------------------------------------------------
-        map $ssl_preread_server_name $https_backend {
-          cal.danmail.me    mac_upstream;
-          blog.danmail.me   mac_upstream;
-          # No default entry: unmatched SNI is dropped.
-        }
 
-        upstream mac_upstream {
-          server mac:443;
-        }
+        ${mkMap}
+
+        ${mkUpstreamBlocks}
 
         server {
           listen 443;
@@ -74,8 +150,6 @@ in
         # provides TCP syslog reception
         module(load="imtcp")
         input(type="imtcp" port="514")
-
-        local5.*     /var/log/haproxy.log
 
         # Separate Caddy logs by tag
         if $programname == 'caddy-cal' then /var/log/remote/caddy-cal.log

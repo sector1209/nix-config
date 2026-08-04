@@ -24,7 +24,20 @@ in
       enable = true;
       rootFs = "tmpfs";
     };
-    edgeProxy.enable = true;
+  };
+
+  roles.edgeProxy = {
+    enable = true;
+    virtualHosts = {
+      "cal.danmail.me" = {
+        destination = "mac:443";
+        useUpstream = true;
+      };
+      "blog.danmail.me" = {
+        destination = "mac:443";
+        useUpstream = true;
+      };
+    };
   };
 
   services.tailscale = {
