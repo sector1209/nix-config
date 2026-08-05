@@ -3,6 +3,7 @@
 {
   lib,
   config,
+  self,
   secrets,
   ...
 }:
@@ -10,25 +11,30 @@ let
 
   roleName = "edgeProxy";
 
-  cfg = config.roles.${roleName};
+  # Get all hosts from flake
+  allHosts = self.nixosConfigurations;
 
-  # Get each instance of cfg.virtualHosts
-  virtualHosts = builtins.attrNames cfg.virtualHosts;
+  # Filter for hosts with virtualHosts defined
+  hostsWithVHostsF = n: v: v.config.roles.${roleName}.virtualHosts != { };
+  hostsWithVHosts = lib.filterAttrs hostsWithVHostsF allHosts;
+
+  # Filter for only virtualHosts attrset
+  enabledVHostsF =
+    name: host: lib.filterAttrs (n: v: (n != "")) host.config.roles.${roleName}.virtualHosts;
+  virtualHosts = lib.concatMapAttrs enabledVHostsF hostsWithVHosts;
 
   # Make a list pairing virtualHost to destination
-  mapList = lib.map (
-    vHost:
-    (
-      "${vHost} ${
-        if cfg.virtualHosts.${vHost}.useUpstream then
-          (lib.concatStringsSep "_" [
-            (builtins.elemAt (lib.strings.splitString ":" cfg.virtualHosts.${vHost}.destination) 0)
-            "upstream"
-          ])
-        else
-          (cfg.virtualHosts.${vHost}.destination)
-      };"
-    )
+  mapList = lib.mapAttrsToList (
+    name: value:
+    "${name}  ${
+      if value.useUpstream then
+        (lib.concatStringsSep "_" [
+          (lib.concatStrings (lib.strings.splitString ":" value.destination))
+          "upstream"
+        ])
+      else
+        (value.destination)
+    };"
   ) virtualHosts;
 
   # Make the map of SRI destination to backend
@@ -38,31 +44,27 @@ let
     "}"
   ];
 
-  # Filter virtualHosts with useUpstream
-  filteredVirtualHosts = lib.filter (vHost: cfg.virtualHosts.${vHost}.useUpstream) virtualHosts;
-
-  # Get the destination of each filtered host
-  destinationList = lib.lists.unique (
-    lib.map (vHost: "${cfg.virtualHosts.${vHost}.destination}") filteredVirtualHosts
-  );
+  # Filter for hosts with useUpstream
+  upstreamHostsF = n: v: v.useUpstream;
+  upstreamHosts = lib.filterAttrs upstreamHostsF virtualHosts;
 
   # Create an upstream block for each filtered virtualHost
-  upstreamBlocks = lib.map (
-    destination:
+  upstreamBlocks = lib.mapAttrsToList (
+    name: value:
     (lib.concatLines (
       let
-        splitDestination = builtins.elemAt (lib.strings.splitString ":" destination) 0;
+        splitDestination = lib.concatStrings (lib.strings.splitString ":" value.destination);
       in
       [
         "upstream ${splitDestination}_upstream {"
-        "  server ${destination};"
+        "  server ${value.destination};"
         "}"
       ]
     ))
-  ) destinationList;
+  ) upstreamHosts;
 
   # Make the upstream blocks
-  mkUpstreamBlocks = lib.concatLines upstreamBlocks;
+  mkUpstreamBlocks = lib.concatLines (lib.lists.unique upstreamBlocks);
 
 in
 {
