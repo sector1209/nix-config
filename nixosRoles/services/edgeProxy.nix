@@ -23,6 +23,23 @@ let
     name: host: lib.filterAttrs (n: v: (n != "")) host.config.roles.${roleName}.virtualHosts;
   virtualHosts = lib.concatMapAttrs enabledVHostsF hostsWithVHosts;
 
+  # Duplicate detection
+  # Flatten to a list of { host, name } for every virtualHost defined on every host
+  hostVHostNamePairs = lib.concatMap (
+    host:
+    builtins.map (name: {
+      inherit host name;
+    }) (builtins.attrNames hostsWithVHosts.${host}.config.roles.${roleName}.virtualHosts)
+  ) (builtins.attrNames hostsWithVHosts);
+
+  # Group into { name = [ host1 host2 ... ]; }
+  vHostNameToHosts = lib.foldl' (
+    acc: pair: acc // { ${pair.name} = (acc.${pair.name} or [ ]) ++ [ pair.host ]; }
+  ) { } hostVHostNamePairs;
+
+  # Keep only names claimed by more than one host
+  duplicateVHosts = lib.filterAttrs (name: hosts: builtins.length hosts > 1) vHostNameToHosts;
+
   # Make a list pairing virtualHost to destination
   mapList = lib.mapAttrsToList (
     name: value:
@@ -101,6 +118,14 @@ in
   };
 
   config = lib.mkIf config.roles.${roleName}.enable {
+
+    assertions = lib.mapAttrsToList (name: hosts: {
+      assertion = false;
+      message = ''
+        roles.edgeProxy.virtualHosts."${name}" is defined on multiple hosts: ${lib.concatStringsSep ", " hosts}.
+        Only one definition can be active; destinations would otherwise be silently merged with one host's value overwriting the other's.
+      '';
+    }) duplicateVHosts;
 
     networking.firewall.allowedTCPPorts = [
       80
