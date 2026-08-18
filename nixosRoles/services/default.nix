@@ -20,6 +20,7 @@
     ./jellyfin.nix
     ./nextcloud.nix
     ./nginx.nix
+    ./ntfy.nix
     ./prometheus-exporter.nix
     ./ssh.nix
     ./tailscale.nix

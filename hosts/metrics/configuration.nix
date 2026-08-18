@@ -21,6 +21,8 @@ in
 
     gotify.enable = true;
 
+    ntfy.enable = true;
+
     beszel-hub.enable = true;
 
     nginx.enable = true;
