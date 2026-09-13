@@ -1,7 +1,7 @@
 exclude: "\\.patch$"
 repos:
   - repo: https://github.com/NixOS/nixfmt
-    rev: v1.4.0
+    rev: v1.5.0
     hooks:
       - id: nixfmt-nix
   - repo: https://github.com/scop/pre-commit-shfmt
