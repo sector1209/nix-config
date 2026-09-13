@@ -1,12 +1,18 @@
 # custom defaults override for borgbackup clients
 
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  secrets,
+  ...
+}:
 
 let
 
   mkBackupJobs =
-    name: cfg:
-    lib.nameValuePair name {
+    jobName: cfg:
+    lib.nameValuePair jobName {
 
       repo = "${cfg.repo}";
       paths = cfg.paths;
@@ -25,20 +31,48 @@ let
         monthly = -1; # Keep at least one archive for each month
       };
       preHook = "${cfg.preHook}";
-      postHook = ''
-        	# User-defined postHook commands (run first)
-        	${cfg.postHook}
+      postHook =
+        let
+          hostName = config.networking.hostName;
+        in
+        ''
+          	# User-defined postHook commands (run first)
+          	${cfg.postHook}
 
-        	# Always send Gotify notifications
-        	export token="$(<${config.sops.secrets."borg/gotify-token".path})"
-        	#echo "$token"
+          	# Always send notifications
+          	if [[ "$exitStatus" == 0 ]]; then
 
-        	if [[ "$exitStatus" == 0 ]]; then
-        	  /run/current-system/sw/bin/curl -X POST "https://gotify.danmail.me/message?token=''${token}" -F "title=${name} backup succeeded" -F "message=${name} backup succeeded";
-        	else
-        	  /run/current-system/sw/bin/curl -X POST "https://gotify.danmail.me/message?token=''${token}" -F "title=${name} backup failed" -F "message=${name} backup failed";
-        	fi
-      '';
+             title="[${hostName}] Backup SUCCESS (${jobName})"
+             priority="low"
+             tags="floppy_disk,heavy_check_mark"
+             body="Host: ${hostName}
+           Job: ${jobName}
+           Status: SUCCESS
+           Archive: $archiveName
+           Time: $(date -Is)"
+
+           else
+
+             title="[${hostName}] Backup FAILED (${jobName})"
+             priority="default"
+             tags="floppy_disk,x"
+             body="Host: ${hostName}
+           Job: ${jobName}
+           Status: FAILED
+           Exit code: $exitStatus
+           Time: $(date -Is)
+           Check: journalctl -u borgbackup-job-${jobName}.service"
+
+           fi
+
+           ${pkgs.curl}/bin/curl -sf \
+             -H "Title: $title" \
+             -H "Priority: $priority" \
+             -H "Tags: $tags" \
+             -H "Authorization: Bearer $(cat ${config.sops.secrets."borg/ntfy-token".path})" \
+             -d "$body" \
+             https://ntfy${secrets.domain-name}/borgbackup
+        '';
 
     };
 
@@ -93,7 +127,7 @@ in
 
   config = lib.mkIf (config.roles.myBorgbackup.jobs != { }) {
 
-    sops.secrets."borg/gotify-token" = { };
+    sops.secrets."borg/ntfy-token" = { };
 
     services.borgbackup.jobs = lib.mapAttrs' mkBackupJobs config.roles.myBorgbackup.jobs;
 
