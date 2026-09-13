@@ -30,48 +30,88 @@ let
         weekly = 4;
         monthly = -1; # Keep at least one archive for each month
       };
-      preHook = "${cfg.preHook}";
+      extraCreateArgs = [
+        "--stats"
+        "--json"
+      ];
+      preHook = ''
+        # Option-defined preHook commands (run first)
+        ${cfg.preHook}
+
+        statsFile=$(mktemp)
+        exec 3>&1
+        exec 1> >(tee "$statsFile" >&3)
+
+        infoBefore=$(borg info --json "$BORG_REPO")
+        repoSizeBefore=$(echo "$infoBefore" | ${pkgs.jq}/bin/jq -r '.cache.stats.unique_csize')
+      '';
+      postCreate = ''
+        exec 1>&3 3>&-
+        if [ -s "$statsFile" ]; then
+          origSize=$(${pkgs.jq}/bin/jq -r '.archive.stats.original_size' "$statsFile")
+          compSize=$(${pkgs.jq}/bin/jq -r '.archive.stats.compressed_size' "$statsFile")
+          dedupSize=$(${pkgs.jq}/bin/jq -r '.archive.stats.deduplicated_size' "$statsFile")
+        fi
+        rm -f "$statsFile"
+      '';
       postHook =
         let
           hostName = config.networking.hostName;
         in
         ''
-          	# User-defined postHook commands (run first)
+          	# Option-defined postHook commands (run first)
           	${cfg.postHook}
+
+            infoAfter=$(borg info --json "$BORG_REPO")
+            repoSizeAfter=$(echo "$infoAfter" | ${pkgs.jq}/bin/jq -r '.cache.stats.unique_csize')
+            repoLogicalSize=$(echo "$infoAfter" | ${pkgs.jq}/bin/jq -r '.cache.stats.total_size')
+            repoDelta=$(( repoSizeAfter - ''${repoSizeBefore:-0} ))
 
           	# Always send notifications
           	if [[ "$exitStatus" == 0 ]]; then
 
-             title="[${hostName}] Backup SUCCESS (${jobName})"
-             priority="low"
-             tags="floppy_disk,heavy_check_mark"
-             body="Host: ${hostName}
-           Job: ${jobName}
-           Status: SUCCESS
-           Archive: $archiveName
-           Time: $(date -Is)"
+               title="[${hostName}] Backup SUCCESS (${jobName})"
+               priority="low"
+               tags="floppy_disk,heavy_check_mark"
+               body="Host: ${hostName}
+             Job: ${jobName}
+             Status: SUCCESS
+             Archive: $archiveName
 
-           else
+             --- This archive ---
+             Original size: $(numfmt --to=iec ''${origSize:-0})
+             Compressed size: $(numfmt --to=iec ''${compSize:-0})
+             New data written: $(numfmt --to=iec ''${dedupSize:-0})
 
-             title="[${hostName}] Backup FAILED (${jobName})"
-             priority="default"
-             tags="floppy_disk,x"
-             body="Host: ${hostName}
-           Job: ${jobName}
-           Status: FAILED
-           Exit code: $exitStatus
-           Time: $(date -Is)
-           Check: journalctl -u borgbackup-job-${jobName}.service"
+             --- Whole repo ---
+             Size on disk: $(numfmt --to=iec $repoSizeAfter)
+             Size uncompressed: $(numfmt --to=iec $repoLogicalSize)
+             Grew by: $(numfmt --to=iec $repoDelta)
 
-           fi
+             Time: $(date -Is)"
 
-           ${pkgs.curl}/bin/curl -sf \
-             -H "Title: $title" \
-             -H "Priority: $priority" \
-             -H "Tags: $tags" \
-             -H "Authorization: Bearer $(cat ${config.sops.secrets."borg/ntfy-token".path})" \
-             -d "$body" \
-             https://ntfy${secrets.domain-name}/borgbackup
+             else
+
+               title="[${hostName}] Backup FAILED (${jobName})"
+               priority="default"
+               tags="floppy_disk,x"
+               body="Host: ${hostName}
+             Job: ${jobName}
+             Status: FAILED
+             Exit code: $exitStatus
+             Repo size (on disk): $(numfmt --to=iec $repoSizeAfter)
+             Time: $(date -Is)
+             Check: journalctl -u borgbackup-job-${jobName}.service"
+
+             fi
+
+             ${pkgs.curl}/bin/curl -sf \
+               -H "Title: $title" \
+               -H "Priority: $priority" \
+               -H "Tags: $tags" \
+               -H "Authorization: Bearer $(cat ${config.sops.secrets."borg/ntfy-token".path})" \
+               -d "$body" \
+               https://ntfy${secrets.domain-name}/borgbackup
         '';
 
     };
