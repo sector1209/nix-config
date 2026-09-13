@@ -29,21 +29,6 @@
     # Add immich user to shared group
     users.groups.shared.members = [ "immich" ];
 
-    # Configure borgbackup
-    #    services.borgbackup.jobs = {
-    #      immichBackup = {
-    #	repo = "borg@backupbox:.";
-    #        paths = [ "${config.services.immich.mediaLocation}" ];
-    #        doInit = true;
-    #        encryption = {
-    #          mode = "repokey-blake2";
-    #          passCommand = "cat ${config.sops.secrets."borg/immich-pass".path}";
-    #        };
-    #        environment = { BORG_RSH = "ssh -i ${config.sops.secrets."borg/immich-priv".path}"; };
-    #      	compression = "auto,zstd";
-    #      };
-    #    };
-
     roles.myBorgbackup.jobs.immich = {
       repo = "borg@backupbox:.";
       paths = [ "${config.services.immich.mediaLocation}" ];
