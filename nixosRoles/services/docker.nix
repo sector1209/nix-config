@@ -54,6 +54,10 @@
             size = 24;
           }
         ];
+        log-driver = "journald";
+        log-opts = {
+          labels = "com.docker.compose.project,com.docker.compose.service";
+        };
       };
     };
 
