@@ -68,7 +68,16 @@
     };
 
     # Convenient shell aliases
-    environment.shellAliases = {
+    environment.shellAliases = lib.mkIf (!config.roles.fish.enable) {
+      dc = "docker compose";
+      dcupdate = "docker compose down && docker compose pull && docker compose up -d --force-recreate --remove-orphans";
+      cdcompdir = "cd /mnt/diskyDocker/composes";
+      caddyreload = "docker exec -it caddy caddy reload --config /etc/caddy/Caddyfile";
+      gluetuntest = "docker run --rm --network=container:gluetun alpine:3.18 sh -c 'apk add wget && wget -qO- https://ipinfo.io'";
+    };
+
+    # Convenient Fish abbreviations
+    programs.fish.shellAbbrs = lib.mkIf config.roles.fish.enable {
       dc = "docker compose";
       dcupdate = "docker compose down && docker compose pull && docker compose up -d --force-recreate --remove-orphans";
       cdcompdir = "cd /mnt/diskyDocker/composes";
