@@ -45,6 +45,14 @@ in
       nix-ld.enable = true;
     };
 
+    environment.shellAliases = lib.mkIf (!config.roles.fish.enable) {
+      cdnixdir = "cd /nix-config";
+    };
+
+    programs.fish.shellAbbrs = lib.mkIf config.roles.fish.enable {
+      cdnixdir = "cd /nix-config";
+    };
+
     preservation.preserveAt."/persist".users.${cfg.devUser}.directories = [
       ".zed_server"
     ];
