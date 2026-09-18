@@ -154,6 +154,8 @@ in
           chunk_idle_period = "5m";
           chunk_retain_period = "30s";
         };
+        pattern_ingester.enabled = true;
+        pattern_ingester.lifecycler.ring.kvstore.store = "inmemory";
         schema_config = {
           configs = [
             {
@@ -180,6 +182,8 @@ in
         limits_config = {
           reject_old_samples = true;
           reject_old_samples_max_age = "168h";
+          discover_log_levels = true;
+          allow_structured_metadata = true;
         };
         analytics = {
           reporting_enabled = false;
