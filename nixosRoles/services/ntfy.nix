@@ -32,7 +32,7 @@ in
         "publisher:${config.sops.placeholder."ntfy/user-pass-hash-publisher"}:user"
         "'"
       ];
-      owner = config.services.ntfy-sh.user;
+      restartUnits = [ "ntfy-sh.service" ];
     };
 
     services.ntfy-sh = {
