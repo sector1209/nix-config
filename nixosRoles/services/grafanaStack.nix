@@ -168,14 +168,14 @@ in
             }
           ];
         };
-        compactor.working_directory = "/tmp/loki/compactor";
+        compactor.working_directory = "/var/lib/loki/compactor";
         storage_config = {
           tsdb_shipper = {
-            cache_location = "/tmp/loki/cache";
-            active_index_directory = "/tmp/loki/index";
+            cache_location = "/var/lib/loki/cache";
+            active_index_directory = "/var/lib/loki/index";
           };
-          boltdb.directory = "/tmp/loki/index";
-          filesystem.directory = "/tmp/loki/chunks";
+          boltdb.directory = "/var/lib/loki/index";
+          filesystem.directory = "/var/lib/loki/chunks";
         };
         limits_config = {
           reject_old_samples = true;
