@@ -197,6 +197,11 @@ in
       };
     };
 
+    services.victoriametrics = {
+      enable = true;
+      listenAddress = ":8428";
+    };
+
     roles.nginx.enable = true;
 
     services.nginx.virtualHosts = {

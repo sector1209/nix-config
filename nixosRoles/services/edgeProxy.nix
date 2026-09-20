@@ -3,6 +3,8 @@
 {
   lib,
   config,
+  pkgs,
+  inputs,
   self,
   secrets,
   ...
@@ -223,11 +225,47 @@ in
       "/var/lib/crowdsec/state/hub/" = lib.mkForce { };
     };
 
-    environment.etc."crowdsec/config.yaml".source =
-      (pkgs.formats.yaml { }).generate "crowdsec.yaml"
-        config.services.crowdsec.settings.general;
+    environment.etc = {
+      "crowdsec/config.yaml".source =
+        (pkgs.formats.yaml { }).generate "crowdsec.yaml"
+          config.services.crowdsec.settings.general;
 
-    systemd.services.crowdsec.serviceConfig.StateDirectory = "crowdsec";
+      "crowdsec/plugins/notification-http" = {
+        source = "${config.services.crowdsec.package}/bin/notification-http";
+        user = config.services.crowdsec.user;
+        group = config.services.crowdsec.group;
+        mode = "0500";
+      };
+    };
+
+    systemd.services.crowdsec.serviceConfig = {
+      # allow crowdsec to start its plugin process under plugin_config's user/group
+      AmbientCapabilities = [
+        "CAP_SETUID"
+        "CAP_SETGID"
+      ];
+      CapabilityBoundingSet = [
+        "CAP_SETUID"
+        "CAP_SETGID"
+      ]; # appended to the module's CAP_SYSLOG entries
+
+      # your current filter from `systemctl cat`, minus ~@privileged
+      SystemCallFilter = lib.mkForce [
+        "~@reboot"
+        "~@swap"
+        "~@obsolete"
+        "~@mount"
+        "~@module"
+        "~@debug"
+        "~@cpu-emulation"
+        "~@clock"
+        "~@raw-io"
+        "~@resources"
+      ];
+    };
+
+    services.crowdsec.package =
+      inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.crowdsec;
 
     environment.systemPackages = [
       (pkgs.writeShellScriptBin "cscli-root" ''
@@ -272,6 +310,7 @@ in
           #   labels.type = "syslog";
           # }
         ];
+
         parsers.s02Enrich =
           let
             entries = secrets.ip-whitelist;
@@ -288,6 +327,59 @@ in
               };
             }
           ];
+
+        notifications = [
+          {
+            type = "http";
+            name = "http_default";
+            log_level = "debug";
+            format = ''
+              {{- range $Alert := . -}}
+                {{- $traefikRouters := GetMeta . "traefik_router_name" -}}
+                {{- range .Decisions -}}
+                {"metric":{"__name__":"cs_lapi_decision","instance":"${config.networking.hostName}","country":"{{$Alert.Source.Cn}}","asname":"{{$Alert.Source.AsName}}","asnumber":"{{$Alert.Source.AsNumber}}","latitude":"{{$Alert.Source.Latitude}}","longitude":"{{$Alert.Source.Longitude}}","iprange":"{{$Alert.Source.Range}}","scenario":"{{.Scenario}}","type":"{{.Type}}","duration":"{{.Duration}}","scope":"{{.Scope}}","ip":"{{.Value}}","traefik_routers":{{ printf "%q" ($traefikRouters | uniq | join ",")}}},"values": [1],"timestamps":[{{now|unixEpoch}}000]}
+                {{- end }}
+                {{- end -}}
+            '';
+            url = "http://metrics:8428/api/v1/import";
+            method = "POST";
+            headers = {
+              Content-Type = "application/json";
+            };
+          }
+        ];
+
+        profiles = [
+          {
+            notifications = [ "http_default" ];
+            decisions = [
+              {
+                duration = "4h";
+                type = "ban";
+              }
+            ];
+            filters = [
+              "Alert.Remediation == true && Alert.GetScope() == 'Ip'"
+            ];
+            name = "default_ip_remediation";
+            on_success = "break";
+          }
+          {
+            notifications = [ "http_default" ];
+            decisions = [
+              {
+                duration = "4h";
+                type = "ban";
+              }
+            ];
+            filters = [
+              "Alert.Remediation == true && Alert.GetScope() == 'Range'"
+            ];
+            name = "default_range_remediation";
+            on_success = "break";
+          }
+        ];
+
       };
 
       settings = {
@@ -298,6 +390,11 @@ in
             level = "full";
             listen_addr = "0.0.0.0";
             listen_port = 6060;
+          };
+          # Needed for HTTP notifications
+          plugin_config = {
+            user = "crowdsec";
+            group = "crowdsec";
           };
         };
         capi = {
@@ -310,6 +407,11 @@ in
     };
 
     # users.users.crowdsec.extraGroups = [ "systemd-journal" ];
+
+    # Add ExecReload fix from nixpkgs-unstable
+    systemd.services.crowdsec.serviceConfig.ExecReload = [
+      "${lib.getExe' pkgs.util-linux "kill"} -HUP $MAINPID"
+    ];
 
     services.crowdsec-firewall-bouncer = {
       enable = true;
