@@ -274,6 +274,13 @@ in
       '')
     ];
 
+    systemd.services.crowdsec.serviceConfig.StateDirectory = "crowdsec";
+
+    sops.secrets."crowdsec/enroll-token" = {
+      owner = config.services.crowdsec.user;
+      group = config.services.crowdsec.group;
+    };
+
     # Configure crowdsec
     services.crowdsec = {
       enable = true;
@@ -402,6 +409,16 @@ in
         };
         lapi = {
           credentialsFile = "/var/lib/crowdsec/local_api_credentials.yaml";
+        };
+        console = {
+          tokenFile = config.sops.secrets."crowdsec/enroll-token".path;
+          configuration = {
+            share_manual_decisions = false;
+            share_tainted = true;
+            share_custom = true;
+            console_management = false;
+            share_context = true;
+          };
         };
       };
     };
