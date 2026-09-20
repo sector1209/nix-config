@@ -123,6 +123,12 @@ in
             { targets = [ "watchtower.d${secrets.domain-name}" ]; }
           ];
         }
+        {
+          job_name = "crowdsec";
+          static_configs = [
+            { targets = [ "edgeware:6060" ]; }
+          ];
+        }
         #      {
         #        job_name = "proxmox";
         #        static_configs = [

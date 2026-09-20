@@ -14,7 +14,6 @@ in
 
   imports = [
     ./hardware-configuration.nix
-    # ./edge-proxy.nix
   ];
 
   networking.hostName = hostname;

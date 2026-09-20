@@ -178,25 +178,151 @@ in
         module(load="imtcp")
         input(type="imtcp" port="514")
 
-        # Separate Caddy logs by tag
-        if $programname == 'caddy-cal' then /var/log/remote/caddy-cal.log
-        & stop
+        template(name="rawmsg" type="string" string="%msg%\n")
 
-        if $programname == 'caddy-blog' then /var/log/remote/caddy-blog.log
-        & stop
+        # Separate Caddy logs by tag
+        if $programname == 'caddy-cal' then {
+          action(type="omfile" file="/var/log/remote/caddy-cal.log" template="rawmsg")
+          stop
+        }
+        if $programname == 'caddy-blog' then {
+          action(type="omfile" file="/var/log/remote/caddy-blog.log" template="rawmsg")
+          stop
+        }
       '';
+    };
+
+    # Rotate rsyslogd files
+    services.logrotate.settings."/var/log/remote/*.log" = {
+      frequency = "daily";
+      maxsize = "200M";
+      rotate = 7;
+      compress = true;
+      delaycompress = true;
+      missingok = true;
+      notifempty = true;
+      postrotate = "systemctl kill -s HUP syslog.service";
     };
 
     preservation.preserveAt."/persist" = {
       directories = [
+        {
+          directory = "/var/lib/private/crowdsec";
+          mode = "0700";
+        }
+        {
+          directory = "/var/lib/private/crowdsec-firewall-bouncer-register";
+          mode = "0700";
+        }
         "/var/lib/fail2ban"
       ];
+    };
+
+    systemd.tmpfiles.settings."10-crowdsec" = {
+      "/var/lib/crowdsec/state" = lib.mkForce { };
+      "/var/lib/crowdsec/state/hub/" = lib.mkForce { };
+    };
+
+    environment.etc."crowdsec/config.yaml".source =
+      (pkgs.formats.yaml { }).generate "crowdsec.yaml"
+        config.services.crowdsec.settings.general;
+
+    systemd.services.crowdsec.serviceConfig.StateDirectory = "crowdsec";
+
+    environment.systemPackages = [
+      (pkgs.writeShellScriptBin "cscli-root" ''
+        export PATH="$PATH:${pkgs.crowdsec}/bin"
+        exec ${lib.getExe' pkgs.crowdsec "cscli"} -c /etc/crowdsec/config.yaml "$@"
+      '')
+    ];
+
+    # Configure crowdsec
+    services.crowdsec = {
+      enable = true;
+
+      #   autoUpdateService = true;
+
+      hub.collections = [
+        "crowdsecurity/linux"
+        "crowdsecurity/sshd"
+        "crowdsecurity/caddy"
+      ];
+
+      localConfig = {
+        acquisitions = [
+          {
+            source = "file";
+            filenames = [ "/var/log/remote/caddy-cal.log" ];
+            log_level = "info";
+            labels = {
+              type = "caddy";
+            };
+          }
+          {
+            source = "file";
+            filenames = [ "/var/log/remote/caddy-blog.log" ];
+            log_level = "info";
+            labels = {
+              type = "caddy";
+            };
+          }
+          # {
+          #   source = "journalctl";
+          #   journalctl_filter = [ "_SYSTEMD_UNIT=sshd.service" ];
+          #   labels.type = "syslog";
+          # }
+        ];
+        parsers.s02Enrich =
+          let
+            entries = secrets.ip-whitelist;
+            isCidr = lib.hasInfix "/";
+          in
+          [
+            {
+              name = "local/trusted-networks";
+              description = "Trusted public IPs and internal networks";
+              whitelist = {
+                reason = "Trusted network";
+                ip = lib.filter (e: !isCidr e) entries;
+                cidr = lib.filter isCidr entries;
+              };
+            }
+          ];
+      };
+
+      settings = {
+        general = {
+          api.server.enable = true;
+          prometheus = {
+            enabled = true;
+            level = "full";
+            listen_addr = "0.0.0.0";
+            listen_port = 6060;
+          };
+        };
+        capi = {
+          credentialsFile = "/var/lib/crowdsec/online_api_credentials.yaml";
+        };
+        lapi = {
+          credentialsFile = "/var/lib/crowdsec/local_api_credentials.yaml";
+        };
+      };
+    };
+
+    # users.users.crowdsec.extraGroups = [ "systemd-journal" ];
+
+    services.crowdsec-firewall-bouncer = {
+      enable = true;
+      settings = {
+        api_url = "http://127.0.0.1:8080/";
+        mode = "iptables";
+      };
     };
 
     # Configure fail2ban
     services.fail2ban = {
       enable = true;
-      ignoreIP = [ "100.0.0.0/8" ] ++ secrets.fail2ban-whitelist;
+      ignoreIP = secrets.ip-whitelist;
       bantime-increment = {
         enable = true;
         overalljails = true;

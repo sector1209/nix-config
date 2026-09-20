@@ -45,6 +45,13 @@
   # Reverse proxies to static site
   services.caddy = {
     enable = true;
+    # Pass correct remote IPs to the blog backend
+    globalConfig = ''
+      servers 127.0.0.1:7000 {
+        trusted_proxies static 127.0.0.1/8
+        client_ip_headers X-Real-IP
+      }
+    '';
     # Reverse proxy to terminate TLS and pass to Anubis
     virtualHosts."blog.danmail.me" = {
       extraConfig = ''
@@ -55,6 +62,7 @@
     # Reverse proxy to serve static blog site
     virtualHosts.":7000" = {
       extraConfig = ''
+        bind 127.0.0.1
         root * /var/lib/www/hugo-website/public
         encode zstd gzip
         file_server
