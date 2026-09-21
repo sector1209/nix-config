@@ -24,7 +24,7 @@
         PermitRootLogin = "prohibit-password"; # see below
         UseDns = true; # trying to solve dennis' ssh woes
         StrictModes = false; # see above
-        LogLevel = "DEBUG"; # above x2
+        LogLevel = "VERBOSE";
       };
       authorizedKeysInHomedir = true; # again, trying to fix
     };

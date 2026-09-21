@@ -311,11 +311,11 @@ in
               type = "caddy";
             };
           }
-          # {
-          #   source = "journalctl";
-          #   journalctl_filter = [ "_SYSTEMD_UNIT=sshd.service" ];
-          #   labels.type = "syslog";
-          # }
+          {
+            source = "journalctl";
+            journalctl_filter = [ "_SYSTEMD_UNIT=sshd.service" ];
+            labels.type = "syslog";
+          }
         ];
 
         parsers.s02Enrich =
@@ -422,8 +422,6 @@ in
         };
       };
     };
-
-    # users.users.crowdsec.extraGroups = [ "systemd-journal" ];
 
     # Add ExecReload fix from nixpkgs-unstable
     systemd.services.crowdsec.serviceConfig.ExecReload = [
