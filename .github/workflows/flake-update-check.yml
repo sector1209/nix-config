@@ -1,0 +1,40 @@
+name: flake-lock-check
+on:
+  schedule:
+    - cron: "0 6 * * *"   # daily, 06:00
+  workflow_dispatch:
+
+jobs:
+  nix-flake-update:
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Access private repository
+        uses: webfactory/ssh-agent@master
+        with:
+          ssh-private-key: ${{ secrets.SECRETS_REPO_PRIVATE_KEY }}
+      - name: Configure SSH for private repo
+        run: |
+          mkdir -p ~/.ssh
+          cat >> ~/.ssh/config << EOF
+          Host github.com-nix-secrets
+            HostName github.com
+            User git
+            IdentityFile ~/.ssh/id_ed25519
+            StrictHostKeyChecking no
+          EOF
+          chmod 600 ~/.ssh/config
+      - uses: actions/checkout@v5
+      - uses: DeterminateSystems/determinate-nix-action@v3
+      - uses: DeterminateSystems/update-flake-lock@main
+        with:
+          commit-msg: "chore(flake.lock): update"
+          pr-title: "chore(flake.lock): update"
+          pr-labels: |
+            dependencies
+            automated
+            auto-merge
+          token: "${{ secrets.GH_TOKEN_FOR_UPDATES }}"

@@ -1,0 +1,27 @@
+name: flake-lock-merge
+on:
+  schedule:
+    - cron: "0 7 * * 6"   # weekly, Saturday, 07:00
+  workflow_dispatch:
+
+jobs:
+  merge-flake-update:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Merge pending flake.lock PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
+        run: |
+          count=$(gh pr list --label auto-merge --state open --json number --jq 'length')
+          if [ "$count" -gt 1 ]; then
+            echo "::warning::Multiple auto-merge PRs open ($count) — investigate before merging"
+            exit 0
+          fi
+          pr=$(gh pr list --label auto-merge --state open --json number --jq '.[0].number // empty')
+          if [ -n "$pr" ]; then
+            gh pr merge "$pr" --auto --squash --delete-branch
+          fi
