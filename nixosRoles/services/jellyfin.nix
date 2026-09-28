@@ -8,7 +8,6 @@
 
   options = {
     roles.jellyfin.enable = lib.mkEnableOption "enables jellyfin module";
-    #    qsv.enable = true;
   };
 
   config = lib.mkIf config.roles.jellyfin.enable {
@@ -36,7 +35,6 @@
     services.jellyfin = {
       enable = true;
       openFirewall = true;
-      #      dataDir = "/mnt/slowDisk/jellyfin";
     };
 
     users.users.jellyfin.extraGroups = [
