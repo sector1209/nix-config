@@ -8,6 +8,17 @@
 }:
 let
   cfg = config.roles.deployMachine;
+
+  shorthand = {
+    cdnixdir = "cd /nix-config";
+    mergelockupdate = ''
+      git fetch origin update_flake_lock_action && \
+        git checkout main && \
+        git merge --ff-only origin/update_flake_lock_action && \
+        git push
+    '';
+  };
+
 in
 {
 
@@ -45,13 +56,9 @@ in
       nix-ld.enable = true;
     };
 
-    environment.shellAliases = lib.mkIf (!config.roles.fish.enable) {
-      cdnixdir = "cd /nix-config";
-    };
+    environment.shellAliases = lib.mkIf (!config.roles.fish.enable) shorthand;
 
-    programs.fish.shellAbbrs = lib.mkIf config.roles.fish.enable {
-      cdnixdir = "cd /nix-config";
-    };
+    programs.fish.shellAbbrs = lib.mkIf config.roles.fish.enable shorthand;
 
     preservation.preserveAt."/persist".users.${cfg.devUser}.directories = [
       ".zed_server"
