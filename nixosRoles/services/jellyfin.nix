@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  secrets,
   ...
 }:
 {
@@ -13,7 +14,7 @@
   config = lib.mkIf config.roles.jellyfin.enable {
 
     fileSystems."/mnt/diskyMediaShare" = {
-      device = "192.168.50.105:/export/diskyMedia";
+      device = "${secrets.lanIp.dennis}:/export/diskyMedia";
       fsType = "nfs";
       options = [
         "rw"

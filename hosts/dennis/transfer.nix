@@ -1,4 +1,5 @@
 {
+  secrets,
   ...
 }:
 {
@@ -19,8 +20,7 @@
   };
 
   services.nfs.server.exports = ''
-    /export         192.168.50.125(rw,fsid=0,no_subtree_check,all_squash,anonuid=1001,anongid=1001)
-    /export/diskyMedia  192.168.50.209(rw,nohide,insecure,no_subtree_check,all_squash,anonuid=166535,anongid=166535)
+    /export/diskyMedia  ${secrets.lanIp.charlie}(rw,nohide,insecure,no_subtree_check,all_squash,anonuid=166535,anongid=166535)
   '';
 
   # for nfsv4

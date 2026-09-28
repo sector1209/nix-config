@@ -3,6 +3,7 @@
 {
   lib,
   config,
+  secrets,
   ...
 }:
 let
@@ -25,7 +26,7 @@ in
   config = lib.mkIf config.roles.borgbackupServer.enable {
 
     fileSystems."/mnt/qnapBackup" = {
-      device = "192.168.50.2:/danBackup";
+      device = "${secrets.lanIp.qnap}:/danBackup";
       fsType = "nfs";
       options = [ "rw" ];
     };

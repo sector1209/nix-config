@@ -28,11 +28,6 @@
     fsType = "ext4";
   };
 
-  #  fileSystems."/mnt/diskyMediaShare" =
-  #    { device = "192.168.50.105:/export/diskyMedia";
-  #      fsType = "nfs";
-  #    };
-
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

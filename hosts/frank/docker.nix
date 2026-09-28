@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  secrets,
   ...
 }:
 {
@@ -24,8 +25,8 @@
       live-restore = false; # stop system hanging on shutdown
       ipv6 = false;
       dns = [
-        "192.168.50.206"
-        "192.168.50.97"
+        secrets.lanIp.technitium-dns
+        secrets.lanIp.frank
       ];
       default-address-pools = [
         {
