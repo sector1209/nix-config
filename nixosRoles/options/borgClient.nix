@@ -111,7 +111,7 @@ let
                -H "Tags: $tags" \
                -H "Authorization: Bearer $(cat ${config.sops.secrets."borg/ntfy-token".path})" \
                -d "$body" \
-               https://ntfy${secrets.domain-name}/borgbackup
+               https://ntfy.${secrets.domainName}/borgbackup
         '';
 
     };

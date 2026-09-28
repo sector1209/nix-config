@@ -120,7 +120,7 @@ in
           scheme = "https";
           bearer_token_file = config.sops.secrets.watchtower_http_api_token.path;
           static_configs = [
-            { targets = [ "watchtower.d${secrets.domain-name}" ]; }
+            { targets = [ "watchtower.d.${secrets.domainName}" ]; }
           ];
         }
         {

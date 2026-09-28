@@ -40,7 +40,7 @@ in
       environmentFile = "${config.sops.templates.ntfy-envFile.path}";
       settings = {
         # Server
-        base-url = "https://ntfy${secrets.domain-name}";
+        base-url = "https://ntfy.${secrets.domainName}";
         behind-proxy = true;
         listen-http = ":2586";
         # Access control
@@ -64,7 +64,7 @@ in
 
     roles.nginx.enable = true;
 
-    services.nginx.virtualHosts."ntfy${secrets.domain-name}" = {
+    services.nginx.virtualHosts."ntfy.${secrets.domainName}" = {
       enableACME = true;
       acmeRoot = null;
       addSSL = true;
