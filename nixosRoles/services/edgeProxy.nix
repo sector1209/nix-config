@@ -342,11 +342,29 @@ in
             log_level = "debug";
             format = ''
               {{- range $Alert := . -}}
-                {{- $traefikRouters := GetMeta . "traefik_router_name" -}}
                 {{- range .Decisions -}}
-                {"metric":{"__name__":"cs_lapi_decision","instance":"${config.networking.hostName}","country":"{{$Alert.Source.Cn}}","asname":"{{$Alert.Source.AsName}}","asnumber":"{{$Alert.Source.AsNumber}}","latitude":"{{$Alert.Source.Latitude}}","longitude":"{{$Alert.Source.Longitude}}","iprange":"{{$Alert.Source.Range}}","scenario":"{{.Scenario}}","type":"{{.Type}}","duration":"{{.Duration}}","scope":"{{.Scope}}","ip":"{{.Value}}","traefik_routers":{{ printf "%q" ($traefikRouters | uniq | join ",")}}},"values": [1],"timestamps":[{{now|unixEpoch}}000]}
+                ${lib.concatStrings [
+                  "{"
+                  ''"metric":{''
+                  ''"__name__":"cs_lapi_decision",''
+                  ''"instance":"${config.networking.hostName}",''
+                  ''"country":"{{$Alert.Source.Cn}}",''
+                  ''"asname":"{{$Alert.Source.AsName}}",''
+                  ''"asnumber":"{{$Alert.Source.AsNumber}}",''
+                  ''"latitude":"{{$Alert.Source.Latitude}}",''
+                  ''"longitude":"{{$Alert.Source.Longitude}}",''
+                  ''"iprange":"{{$Alert.Source.Range}}",''
+                  ''"scenario":"{{.Scenario}}",''
+                  ''"type":"{{.Type}}",''
+                  ''"duration":"{{.Duration}}",''
+                  ''"scope":"{{.Scope}}",''
+                  ''"ip":"{{.Value}}",''
+                  ''"values": [1],''
+                  ''"timestamps":[{{now|unixEpoch}}000]''
+                  "}"
+                ]}
                 {{- end }}
-                {{- end -}}
+              {{- end -}}
             '';
             url = "http://metrics:8428/api/v1/import";
             method = "POST";
