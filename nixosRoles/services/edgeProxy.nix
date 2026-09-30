@@ -376,22 +376,10 @@ in
 
         profiles = [
           {
-            notifications = [ "http_default" ];
-            decisions = [
-              {
-                duration = "4h";
-                type = "ban";
-              }
-            ];
-            duration_expr = "Sprintf('%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 4)";
+            name = "default_ip_remediation";
             filters = [
               "Alert.Remediation == true && Alert.GetScope() == 'Ip'"
             ];
-            name = "default_ip_remediation";
-            on_success = "break";
-          }
-          {
-            notifications = [ "http_default" ];
             decisions = [
               {
                 duration = "4h";
@@ -399,10 +387,22 @@ in
               }
             ];
             duration_expr = "Sprintf('%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 4)";
+            notifications = [ "http_default" ];
+            on_success = "break";
+          }
+          {
+            name = "default_range_remediation";
             filters = [
               "Alert.Remediation == true && Alert.GetScope() == 'Range'"
             ];
-            name = "default_range_remediation";
+            decisions = [
+              {
+                duration = "4h";
+                type = "ban";
+              }
+            ];
+            duration_expr = "Sprintf('%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 4)";
+            notifications = [ "http_default" ];
             on_success = "break";
           }
         ];
