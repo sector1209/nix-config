@@ -383,6 +383,7 @@ in
                 type = "ban";
               }
             ];
+            duration_expr = "Sprintf('%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 4)";
             filters = [
               "Alert.Remediation == true && Alert.GetScope() == 'Ip'"
             ];
@@ -397,6 +398,7 @@ in
                 type = "ban";
               }
             ];
+            duration_expr = "Sprintf('%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 4)";
             filters = [
               "Alert.Remediation == true && Alert.GetScope() == 'Range'"
             ];
