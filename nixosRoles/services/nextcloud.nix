@@ -4,6 +4,7 @@
   pkgs,
   lib,
   config,
+  secrets,
   ...
 }:
 let
@@ -60,7 +61,7 @@ in
       local.file_match "nextcloud" {
         path_targets = [{
           __path__ = "/var/lib/nextcloud/data/nextcloud.log",
-          instance  = "nc.danmail.me",
+          instance  = "nc.${secrets.domainName}",
           job       = "nextcloud",
         }]
       }
@@ -85,7 +86,7 @@ in
 
     # Configure nginx
     services.nginx.virtualHosts = {
-      "nc.danmail.me" = {
+      "nc.${secrets.domainName}" = {
         enableACME = true;
         acmeRoot = null; # i think this makes it use DNS-01
         forceSSL = true;
@@ -102,7 +103,7 @@ in
     # Set up Nextcloud
     services.nextcloud = {
       enable = true;
-      hostName = "nc.danmail.me";
+      hostName = "nc.${secrets.domainName}";
 
       # Need to manually increment with every major upgrade.
       package = nextcloudPackage;

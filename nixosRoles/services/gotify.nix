@@ -3,6 +3,7 @@
 {
   lib,
   config,
+  secrets,
   ...
 }:
 {
@@ -27,7 +28,7 @@
 
     # configure nginx host
     services.nginx.virtualHosts = {
-      "gotify.danmail.me" = {
+      "gotify.${secrets.domainName}" = {
         enableACME = true;
         acmeRoot = null; # i think this makes it use DNS-01 validation
         addSSL = true;

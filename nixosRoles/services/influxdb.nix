@@ -3,6 +3,7 @@
 {
   lib,
   config,
+  secrets,
   ...
 }:
 let
@@ -36,7 +37,7 @@ in
       ];
     };
 
-    services.nginx.virtualHosts."influxdb.danmail.me" = {
+    services.nginx.virtualHosts."influxdb.${secrets.domainName}" = {
       addSSL = true;
       enableACME = true;
       acmeRoot = null;

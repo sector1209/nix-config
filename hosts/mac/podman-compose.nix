@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  secrets,
   ...
 }:
 {
@@ -35,7 +36,7 @@
 
   # ACME service for SSL certificate
   security.acme = {
-    certs."cal.danmail.me" = {
+    certs."cal.${secrets.domainName}" = {
       group = config.services.caddy.group;
     };
   };
@@ -55,7 +56,7 @@
          }
       	}
     '';
-    virtualHosts."cal.danmail.me" = {
+    virtualHosts."cal.${secrets.domainName}" = {
       extraConfig = ''
         	redir /.well-known/carddav /dav/ 301
         	redir /.well-known/caldav /dav/ 301
@@ -63,7 +64,7 @@
         	  output stdout
         	  level INFO
         	}
-        	tls /var/lib/acme/cal.danmail.me/cert.pem /var/lib/acme/cal.danmail.me/key.pem
+        	tls /var/lib/acme/cal.${secrets.domainName}/cert.pem /var/lib/acme/cal.${secrets.domainName}/key.pem
         	@blocked {
         	  not remote_ip private_ranges 100.0.0.0/8
         	  path /login /dashboard

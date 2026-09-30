@@ -1,6 +1,11 @@
 # custom module for ssh
 
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  secrets,
+  ...
+}:
 let
 
   roleName = "technitium-dns";
@@ -51,7 +56,7 @@ in
 
     services.nginx = {
       virtualHosts = {
-        "${cfg.hostName}.danmail.me" = {
+        "${cfg.hostName}.${secrets.domainName}" = {
           enableACME = true;
           acmeRoot = null; # i think this makes it use DNS-01 validation
           addSSL = true;

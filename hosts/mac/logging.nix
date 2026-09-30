@@ -1,4 +1,7 @@
-{ ... }:
+{
+  secrets,
+  ...
+}:
 {
   # Syslogd service to collect caddy logs and forward to edgeware for justice
   services.rsyslogd = {
@@ -7,14 +10,14 @@
       # Load the file input module
       module(load="imfile" PollingInterval="10")
 
-      # Monitor Caddy cal.danmail.me access log
+      # Monitor Caddy cal.${secrets.domainName} access log
       input(type="imfile"
-            File="/var/log/caddy/access-cal.danmail.me.log"
+            File="/var/log/caddy/access-cal.${secrets.domainName}.log"
             Tag="caddy-cal"
             Severity="info"
             Facility="local6")
 
-      # Monitor Caddy blog.danmail.me access log
+      # Monitor Caddy blog.${secrets.domainName} access log
       input(type="imfile"
             File="/var/log/caddy/access-blog-backend.log"
             Tag="caddy-blog"

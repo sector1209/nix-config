@@ -3,6 +3,7 @@
 {
   config,
   lib,
+  secrets,
   ...
 }:
 let
@@ -28,11 +29,11 @@ in
   roles.edgeProxy = {
     enable = true;
     virtualHosts = {
-      "cal.danmail.me" = {
+      "cal.${secrets.domainName}" = {
         destination = "mac:443";
         useUpstream = true;
       };
-      "blog.danmail.me" = {
+      "blog.${secrets.domainName}" = {
         destination = "mac:443";
         useUpstream = true;
       };

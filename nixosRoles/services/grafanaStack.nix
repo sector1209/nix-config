@@ -205,7 +205,7 @@ in
     roles.nginx.enable = true;
 
     services.nginx.virtualHosts = {
-      "grafana.danmail.me" = {
+      "grafana.${secrets.domainName}" = {
         forceSSL = true;
         enableACME = true;
         acmeRoot = null;
@@ -213,7 +213,7 @@ in
           proxyPass = "http://localhost:9010";
         };
       };
-      "prometheus.danmail.me" = {
+      "prometheus.${secrets.domainName}" = {
         forceSSL = true;
         enableACME = true;
         acmeRoot = null;

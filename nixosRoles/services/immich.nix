@@ -3,6 +3,7 @@
 {
   lib,
   config,
+  secrets,
   ...
 }:
 {
@@ -37,7 +38,7 @@
     };
 
     # Configure nginx
-    services.nginx.virtualHosts."immich.danmail.me" = {
+    services.nginx.virtualHosts."immich.${secrets.domainName}" = {
       enableACME = true;
       acmeRoot = null; # i think this makes it use DNS-01
       forceSSL = true;
@@ -74,7 +75,7 @@
       };
       machine-learning.enable = true;
       settings = {
-        server.externalDomain = "https://immich.danmail.me";
+        server.externalDomain = "https://immich.${secrets.domainName}";
         newVersionCheck.enabled = true;
       };
     };

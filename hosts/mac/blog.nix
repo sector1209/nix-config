@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  secrets,
   ...
 }:
 {
@@ -37,7 +38,7 @@
 
   # ACME service for SSL certificate
   security.acme = {
-    certs."blog.danmail.me" = {
+    certs."blog.${secrets.domainName}" = {
       group = config.services.caddy.group;
     };
   };
@@ -53,9 +54,9 @@
       }
     '';
     # Reverse proxy to terminate TLS and pass to Anubis
-    virtualHosts."blog.danmail.me" = {
+    virtualHosts."blog.${secrets.domainName}" = {
       extraConfig = ''
-        tls /var/lib/acme/blog.danmail.me/cert.pem /var/lib/acme/blog.danmail.me/key.pem
+        tls /var/lib/acme/blog.${secrets.domainName}/cert.pem /var/lib/acme/blog.${secrets.domainName}/key.pem
         reverse_proxy localhost:8081
       '';
     };

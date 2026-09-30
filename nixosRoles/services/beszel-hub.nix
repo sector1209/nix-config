@@ -3,6 +3,7 @@
 {
   lib,
   config,
+  secrets,
   ...
 }:
 let
@@ -22,7 +23,7 @@ in
 
     # Configure nginx host
     services.nginx.virtualHosts = {
-      "beszel.danmail.me" = {
+      "beszel.${secrets.domainName}" = {
         enableACME = true;
         acmeRoot = null; # i think this makes it use DNS-01 validation
         addSSL = true;
@@ -36,7 +37,7 @@ in
     services.beszel.hub = {
       enable = true;
       environment = {
-        APP_URL = "https://beszel.danmail.me";
+        APP_URL = "https://beszel.${secrets.domainName}";
       };
     };
   };

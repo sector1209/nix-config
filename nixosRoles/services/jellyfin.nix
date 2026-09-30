@@ -43,8 +43,8 @@
     ];
 
     services.nginx.virtualHosts = {
-      "jellyfin.c.danmail.me" = {
-        serverAliases = [ "jellyfin.danmail.me" ];
+      "jellyfin.c.${secrets.domainName}" = {
+        serverAliases = [ "jellyfin.${secrets.domainName}" ];
         enableACME = true;
         acmeRoot = null;
         addSSL = true;

@@ -3,6 +3,7 @@
 {
   lib,
   config,
+  secrets,
   ...
 }:
 let
@@ -23,7 +24,7 @@ in
     services.uptime-kuma.enable = true;
 
     services.nginx.virtualHosts = {
-      "uptime.danmail.me" = {
+      "uptime.${secrets.domainName}" = {
         enableACME = true;
         acmeRoot = null; # i think this makes it use DNS-01
         forceSSL = true;

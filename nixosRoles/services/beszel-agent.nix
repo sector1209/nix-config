@@ -3,6 +3,7 @@
 {
   lib,
   config,
+  secrets,
   ...
 }:
 let
@@ -38,7 +39,7 @@ in
         PORT = "45876";
         EXTRA_FILESYSTEMS = lib.concatStringsSep "," config.roles.beszel-agent.extraFilesystems;
         DOCKER_HOST = lib.mkIf config.virtualisation.docker.rootless.enable "unix:///run/user/1001/docker.sock";
-        HUB_URL = "https://beszel.danmail.me";
+        HUB_URL = "https://beszel.${secrets.domainName}";
       };
       environmentFile = config.sops.secrets.beszel-env-file.path;
     };

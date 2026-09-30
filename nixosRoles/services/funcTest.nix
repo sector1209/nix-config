@@ -3,6 +3,7 @@
 {
   lib,
   config,
+  secrets,
   ...
 }:
 {
@@ -40,7 +41,7 @@
 
     services.nginx = {
       virtualHosts = {
-        "dns.danmail.me" = {
+        "dns.${secrets.domainName}" = {
           enableACME = true;
           acmeRoot = null; # i think this makes it use DNS-01 validation
           addSSL = true;
