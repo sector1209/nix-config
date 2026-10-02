@@ -358,7 +358,8 @@ in
                   ''"type":"{{.Type}}",''
                   ''"duration":"{{.Duration}}",''
                   ''"scope":"{{.Scope}}",''
-                  ''"ip":"{{.Value}}",''
+                  ''"ip":"{{.Value}}"''
+                  "},"
                   ''"values": [1],''
                   ''"timestamps":[{{now|unixEpoch}}000]''
                   "}"
