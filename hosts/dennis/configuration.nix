@@ -44,11 +44,6 @@ in
     ];
   };
 
-  # Enable automatic updates
-  system.autoUpgrade = {
-    flake = "/etc/nixos.#${hostname}";
-  };
-
   # Don't use the boot drive for grub
   boot.loader.grub.enable = false;
   boot.loader.systemd-boot.enable = true;
