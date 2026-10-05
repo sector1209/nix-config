@@ -1,6 +1,7 @@
 # configuration for dennis
 
 {
+  secrets,
   ...
 }:
 let
@@ -63,6 +64,11 @@ in
         "noatime"
       ];
     };
+  }
+  // secrets.pool-mounts;
+
+  services.btrfs.autoScrub = {
+    enable = true;
   };
 
   system.stateVersion = "23.11";
