@@ -52,7 +52,7 @@ in
   # Mount media storage disk
   fileSystems = {
     "/mnt/diskyMedia" = {
-      device = "/dev/disk/by-uuid/9c60086b-fc53-4821-895a-deb63815b9fd";
+      device = "/dev/disk/by-label/diskymedia";
       fsType = "btrfs";
       options = [
         "subvol=@media"

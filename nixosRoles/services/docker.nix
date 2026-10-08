@@ -64,7 +64,7 @@
 
     # Mount filesystem for docker-root
     fileSystems."/mnt/diskyDocker" = {
-      device = "/dev/disk/by-uuid/c1e06b1f-61cc-44a1-a635-efab944ab79a";
+      device = "/dev/disk/by-label/diskydocker";
       fsType = "ext4";
     };
 
