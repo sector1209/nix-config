@@ -62,7 +62,7 @@ in
               command = ''/bin/sh -c exec ${env} -i PATH\="''${PATH-}" "$@" sh nix-env -p /nix/var/nix/profiles/system --set ${storePrefix}-${systemName}'';
             }) envVariants)
             ++ (map (env: {
-              command = ''/bin/sh -c exec ${env} -i PATH\="''${PATH-}" LOCALE_ARCHIVE\="''${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK\="''${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER\=[01] "$@" sh systemd-run -E LOCALE_ARCHIVE -E NIXOS_INSTALL_BOOTLOADER -E NIXOS_NO_CHECK --collect --no-ask-password --pipe --quiet --service-type\=exec --unit\=nixos-rebuild-switch-to-configuration ${storePrefix}-${systemName}/bin/switch-to-configuration *'';
+              command = ''/bin/sh -c exec ${env} -i * "$@" sh systemd-run * ${storePrefix}-${systemName}/bin/switch-to-configuration *'';
             }) envVariants);
         }
       ];
