@@ -21,7 +21,7 @@ let
   mkSopsConfig = user: {
     "home-manager-sops-key-${user}" = {
       owner = "${user}";
-      path = "/home/${user}/.config/sops/age/keys.txt";
+      mode = "0400";
     };
   };
 
@@ -31,19 +31,6 @@ let
   # Generate a sops.secret.* configuration for each user in hmSopsUsers
   # Turn hmSopsConfigsList into an attribute set
   hmSecretsConfig = lib.mergeAttrsList hmSopsConfigsList;
-
-  # List the groups of all home-manager sops users
-  # Apply the function to each item in hmSopsUsers to create a new list
-  hmSopsUserGroups = lib.map (user: config.users.users.${user}.group) hmSopsUsers;
-
-  # Create a systemd tmpfiles rules config for each home-manager user with home-manager sops enabled
-  # Return a string (systemd tmpfiles config)
-  mkTmpfilesConfig =
-    user: group: "Z ${config.users.users.${user}.home}/.config 0755 ${user} ${group} - -";
-
-  # Create a list of Nixos Systemd tmpfiles rules configs
-  # Combine the lists hmSopsUsers and hmSopsUserGroups via the function mkTmpfilesConfig
-  tmpfilesConfig = lib.zipListsWith mkTmpfilesConfig hmSopsUsers hmSopsUserGroups;
 
 in
 {
@@ -62,15 +49,6 @@ in
     sops = {
       secrets = lib.mkIf (config ? home-manager) hmSecretsConfig;
       useSystemdActivation = config.preservation.enable;
-    };
-
-    # Ensure the home .config directory has correct ownership
-    systemd.tmpfiles.rules = lib.mkIf (config ? home-manager) tmpfilesConfig;
-
-    # Make sure Sops runs after systemd tmpfiles have been set up
-    systemd.services.sops-install-secrets = lib.mkIf ((config ? home-manager) && (hmSopsUsers != [ ])) {
-      before = [ "systemd-tmpfiles-resetup.service" ];
-      requires = [ "systemd-tmpfiles-resetup.service" ];
     };
 
   };
