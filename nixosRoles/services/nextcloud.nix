@@ -22,10 +22,6 @@ in
 
   config = lib.mkIf config.roles.nextcloud.enable {
 
-    sops.secrets.nc-admin-pass = {
-      owner = config.users.users.nextcloud.name;
-    };
-
     sops.secrets = {
       "borg/nextcloud-pass" = { };
       "borg/nextcloud-priv" = { };
@@ -131,7 +127,6 @@ in
         dbtype = "mysql"; # Actually installs mariadb behind the scenes
         dbuser = "nextcloud";
         dbname = "nextcloud";
-        adminpassFile = config.sops.secrets.nc-admin-pass.path;
       };
 
       caching.redis = true;
