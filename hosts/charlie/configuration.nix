@@ -1,14 +1,10 @@
-# configuration for charlie
-
 {
   lib,
   pkgs,
   ...
 }:
 let
-
   hostname = "charlie";
-
 in
 {
 

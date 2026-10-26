@@ -1,5 +1,3 @@
-# configuration for dennis
-
 {
   secrets,
   ...
@@ -20,18 +18,13 @@ in
   networking.hostName = hostname;
 
   roles = {
-
     docker.enable = true;
-
     vmSettings.enable = true;
-
     glances.enable = true;
-
     beszel-agent.extraFilesystems = [
       "/mnt/diskyMedia__diskyMedia"
       "/mnt/diskyDocker__diskyDocker"
     ];
-
   };
 
   # Define a user account.
@@ -47,7 +40,6 @@ in
   # Don't use the boot drive for grub
   boot.loader.grub.enable = false;
   boot.loader.systemd-boot.enable = true;
-  #  boot.loader.grub.efiSupport = true;
 
   # Mount media storage disk
   fileSystems = {
@@ -67,4 +59,5 @@ in
   };
 
   system.stateVersion = "23.11";
+
 }

@@ -1,12 +1,8 @@
-# configuration for technitium-dns
-
 {
   ...
 }:
 let
-
   hostname = "technitium-dns";
-
 in
 {
 
@@ -17,16 +13,11 @@ in
   networking.hostName = hostname;
 
   roles = {
-
-    #  containerSettings.enable = true;
-
     proxmoxContainer.enable = true;
-
     technitium-dns = {
       enable = true;
       hostName = "dns";
     };
-
   };
 
   system.stateVersion = "24.11";

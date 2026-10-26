@@ -1,5 +1,3 @@
-# configuration for edgeware
-
 {
   config,
   secrets,
@@ -23,18 +21,17 @@ in
       enable = true;
       rootFs = "tmpfs";
     };
-  };
-
-  roles.edgeProxy = {
-    enable = true;
-    virtualHosts = {
-      "cal.${secrets.domainName}" = {
-        destination = "mac:443";
-        useUpstream = true;
-      };
-      "blog.${secrets.domainName}" = {
-        destination = "mac:443";
-        useUpstream = true;
+    edgeProxy = {
+      enable = true;
+      virtualHosts = {
+        "cal.${secrets.domainName}" = {
+          destination = "mac:443";
+          useUpstream = true;
+        };
+        "blog.${secrets.domainName}" = {
+          destination = "mac:443";
+          useUpstream = true;
+        };
       };
     };
   };
@@ -59,7 +56,7 @@ in
     "net.ifnames=0"
   ];
 
-  # My Initrd config, enable ZSTD compression and use systemd-based stage 1 boot
+  # My Initrd config, enable ZSTD compression
   boot.initrd = {
     compressor = "zstd";
     compressorArgs = [
@@ -78,7 +75,6 @@ in
   # Manage networking with systemd-networkd
   systemd.network.enable = true;
   networking.useNetworkd = true;
-  #  services.resolved.enable = false;
 
   boot.initrd.availableKernelModules = [
     "virtio_net"
@@ -92,12 +88,6 @@ in
     "virtio_console"
     "virtio_rng"
   ];
-
-  preservation.preserveAt."/persist" = {
-    directories = [
-      "/var/lib/systemd/coredump"
-    ];
-  };
 
   programs.fuse.userAllowOther = true;
 

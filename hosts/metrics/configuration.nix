@@ -1,12 +1,8 @@
-# configuration for metrics monitoring proxmox container
-
 {
   ...
 }:
 let
-
   hostname = "metrics";
-
 in
 {
   imports = [
@@ -16,23 +12,14 @@ in
   networking.hostName = hostname;
 
   roles = {
-
     proxmoxContainer.enable = true;
-
     gotify.enable = true;
-
     ntfy.enable = true;
-
     beszel-hub.enable = true;
-
     nginx.enable = true;
-
     influxdb.enable = true;
-
     grafanaStack.enable = true;
-
     uptime-kuma.enable = true;
-
   };
 
   system.stateVersion = "24.11";

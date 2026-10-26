@@ -1,13 +1,9 @@
-# configuration for frank
-
 {
   lib,
   ...
 }:
 let
-
   hostname = "frank";
-
 in
 {
 
@@ -19,17 +15,14 @@ in
   networking.hostName = hostname;
 
   roles = {
-
     preservation = {
       enable = true;
       rootFs = "btrfs-rollback";
     };
-
     technitium-dns = {
       enable = true;
       hostName = "dns2";
     };
-
   };
 
   services.tailscale = {

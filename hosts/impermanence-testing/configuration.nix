@@ -1,14 +1,11 @@
 { ... }:
 let
-
   hostname = "impermanence-testing";
-
 in
 {
 
   imports = [
     ./hardware-configuration.nix
-    # ./preservation.nix
   ];
 
   roles = {
@@ -26,4 +23,5 @@ in
   services.qemuGuest.enable = true;
 
   system.stateVersion = "26.05";
+
 }

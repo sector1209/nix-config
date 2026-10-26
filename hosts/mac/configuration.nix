@@ -1,13 +1,9 @@
-# configuration for mac
-
 {
   secrets,
   ...
 }:
 let
-
   hostname = "mac";
-
 in
 {
 
@@ -21,12 +17,10 @@ in
   networking.hostName = hostname;
 
   roles = {
-
     preservation = {
       enable = true;
       rootFs = "btrfs-rollback";
     };
-
   };
 
   # Enable QEMU Guest for Proxmox
@@ -53,26 +47,9 @@ in
     "net.ifnames=0"
   ];
 
-  # My Initrd config, enable ZSTD compression
-  boot.initrd = {
-    compressor = "zstd";
-    compressorArgs = [
-      "-19"
-      "-T0"
-    ];
-  };
-
-  # Install Grub
-  #  boot.loader.grub = {
-  #    enable = !config.boot.isContainer;
-  #    default = "saved";
-  #    devices = ["/dev/vda"];
-  #  };
-
   # Manage networking with systemd-networkd
   systemd.network.enable = true;
   networking.useNetworkd = true;
-  #  services.resolved.enable = false;
 
   boot.initrd.availableKernelModules = [
     "virtio_net"
