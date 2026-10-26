@@ -3,8 +3,6 @@
 {
   lib,
   config,
-  pkgs,
-  inputs,
   self,
   secrets,
   ...
@@ -209,83 +207,23 @@ in
     preservation.preserveAt."/persist" = {
       directories = [
         {
-          directory = "/var/lib/private/crowdsec";
+          directory = "/var/lib/crowdsec";
+          user = "crowdsec";
+          group = "crowdsec";
           mode = "0700";
         }
         {
-          directory = "/var/lib/private/crowdsec-firewall-bouncer-register";
-          mode = "0700";
+          directory = "/var/lib/crowdsec-firewall-bouncer-register";
         }
         "/var/lib/fail2ban"
       ];
     };
 
-    systemd.tmpfiles.settings."10-crowdsec" = {
-      "/var/lib/crowdsec/state" = lib.mkForce { };
-      "/var/lib/crowdsec/state/hub/" = lib.mkForce { };
-    };
-
-    environment.etc = {
-      "crowdsec/config.yaml".source =
-        (pkgs.formats.yaml { }).generate "crowdsec.yaml"
-          config.services.crowdsec.settings.general;
-
-      "crowdsec/plugins/notification-http" = {
-        source = "${config.services.crowdsec.package}/bin/notification-http";
-        user = config.services.crowdsec.user;
-        group = config.services.crowdsec.group;
-        mode = "0500";
-      };
-    };
-
-    systemd.services.crowdsec.serviceConfig = {
-      # allow crowdsec to start its plugin process under plugin_config's user/group
-      AmbientCapabilities = [
-        "CAP_SETUID"
-        "CAP_SETGID"
-      ];
-      CapabilityBoundingSet = [
-        "CAP_SETUID"
-        "CAP_SETGID"
-      ]; # appended to the module's CAP_SYSLOG entries
-
-      # your current filter from `systemctl cat`, minus ~@privileged
-      SystemCallFilter = lib.mkForce [
-        "~@reboot"
-        "~@swap"
-        "~@obsolete"
-        "~@mount"
-        "~@module"
-        "~@debug"
-        "~@cpu-emulation"
-        "~@clock"
-        "~@raw-io"
-        "~@resources"
-      ];
-    };
-
-    services.crowdsec.package =
-      inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.crowdsec;
-
-    environment.systemPackages = [
-      (pkgs.writeShellScriptBin "cscli-root" ''
-        export PATH="$PATH:${pkgs.crowdsec}/bin"
-        exec ${lib.getExe' pkgs.crowdsec "cscli"} -c /etc/crowdsec/config.yaml "$@"
-      '')
-    ];
-
-    systemd.services.crowdsec.serviceConfig.StateDirectory = "crowdsec";
-
-    sops.secrets."crowdsec/enroll-token" = {
-      owner = config.services.crowdsec.user;
-      group = config.services.crowdsec.group;
-    };
+    sops.secrets."crowdsec/enroll-token" = { };
 
     # Configure crowdsec
     services.crowdsec = {
       enable = true;
-
-      #   autoUpdateService = true;
 
       hub.collections = [
         "crowdsecurity/linux"
@@ -293,7 +231,7 @@ in
         "crowdsecurity/caddy"
       ];
 
-      localConfig = {
+      settings = {
         acquisitions = [
           {
             source = "file";
@@ -387,7 +325,7 @@ in
                 type = "ban";
               }
             ];
-            duration_expr = "Sprintf('%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 4)";
+            duration_expr = "Sprintf('%%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 4)";
             notifications = [ "http_default" ];
             on_success = "break";
           }
@@ -402,37 +340,25 @@ in
                 type = "ban";
               }
             ];
-            duration_expr = "Sprintf('%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 4)";
+            duration_expr = "Sprintf('%%dh', (GetDecisionsCount(Alert.GetValue()) + 1) * 4)";
             notifications = [ "http_default" ];
             on_success = "break";
           }
         ];
 
-      };
-
-      settings = {
-        general = {
-          api.server.enable = true;
+        config = {
           prometheus = {
             enabled = true;
             level = "full";
             listen_addr = "0.0.0.0";
             listen_port = 6060;
           };
-          # Needed for HTTP notifications
-          plugin_config = {
-            user = "crowdsec";
-            group = "crowdsec";
-          };
+
+          api.server.online_client.credentials_path = "${config.services.crowdsec.settings.config.config_paths.data_dir}/online_api_credentials.yaml";
         };
-        capi = {
-          credentialsFile = "/var/lib/crowdsec/online_api_credentials.yaml";
-        };
-        lapi = {
-          credentialsFile = "/var/lib/crowdsec/local_api_credentials.yaml";
-        };
+
         console = {
-          tokenFile = config.sops.secrets."crowdsec/enroll-token".path;
+          enrollKeyFile = config.sops.secrets."crowdsec/enroll-token".path;
           configuration = {
             share_manual_decisions = false;
             share_tainted = true;
@@ -443,11 +369,6 @@ in
         };
       };
     };
-
-    # Add ExecReload fix from nixpkgs-unstable
-    systemd.services.crowdsec.serviceConfig.ExecReload = [
-      "${lib.getExe' pkgs.util-linux "kill"} -HUP $MAINPID"
-    ];
 
     services.crowdsec-firewall-bouncer = {
       enable = true;

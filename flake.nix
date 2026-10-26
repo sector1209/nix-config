@@ -96,8 +96,8 @@
         inputs.disko.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
       ])
-      (mkNixos "edgeware" inputs.nixpkgs [
-        inputs.nixvim.nixosModules.nixvim
+      (mkNixos "edgeware" inputs.nixpkgs-unstable [
+        inputs.nixvim-unstable.nixosModules.nixvim
         inputs.disko.nixosModules.default
       ])
       (mkNixos "frank" inputs.nixpkgs [
