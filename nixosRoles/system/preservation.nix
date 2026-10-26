@@ -93,7 +93,6 @@ in
       tmp.cleanOnBoot = true;
       loader.systemd-boot.enable = lib.mkForce true;
       loader.efi.canTouchEfiVariables = true;
-      initrd.systemd.enable = true;
       initrd.systemd.services.rollback = {
         description = "Btrfs root rollback to fresh subvolume";
 
