@@ -27,14 +27,6 @@
 
     boot.growPartition = lib.mkDefault true;
 
-    # Allow remote updates with flakes and non-root users
-    nix.settings.trusted-users = [
-      "root"
-      "@wheel"
-    ];
-
-    programs.ssh.startAgent = true;
-
     # Default filesystem
     fileSystems."/" = lib.mkDefault {
       device = "/dev/disk/by-label/nixos";
