@@ -8,7 +8,9 @@
 }:
 {
 
-  imports = [ (modulesPath + "/virtualisation/proxmox-lxc.nix") ]; # Options for proxmox-lxc found here: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/proxmox-lxc.nix
+  # Options for proxmox-lxc found here:
+  # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/virtualisation/proxmox-lxc.nix
+  imports = [ (modulesPath + "/virtualisation/proxmox-lxc.nix") ];
 
   options = {
     roles.proxmoxContainer = {
@@ -22,19 +24,22 @@
     };
   };
 
-  config = {
+  config =
+    let
+      cfg = config.roles.proxmoxContainer;
+    in
+    {
 
-    proxmoxLXC = {
-      enable = config.roles.proxmoxContainer.enable;
-      manageNetwork = lib.mkIf config.roles.proxmoxContainer.enable false;
-      manageHostName = lib.mkIf config.roles.proxmoxContainer.enable true;
-      privileged = config.roles.proxmoxContainer.privilaged;
+      proxmoxLXC = {
+        enable = cfg.enable;
+        manageNetwork = !cfg.enable;
+        manageHostName = cfg.enable;
+        privileged = cfg.privilaged;
+      };
+
+      networking.hostName = lib.mkIf config.proxmoxLXC.manageHostName (
+        lib.mkOverride 500 (lib.strings.removeSuffix "\n" (builtins.readFile /etc/hostname))
+      );
 
     };
-
-    networking.hostName = lib.mkIf config.proxmoxLXC.manageHostName (
-      lib.mkOverride 500 (lib.strings.removeSuffix "\n" (builtins.readFile /etc/hostname))
-    );
-
-  };
 }
