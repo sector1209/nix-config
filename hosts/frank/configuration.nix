@@ -2,17 +2,12 @@
   lib,
   ...
 }:
-let
-  hostname = "frank";
-in
 {
 
   imports = [
     ./hardware-configuration.nix
     ./docker.nix
   ];
-
-  networking.hostName = hostname;
 
   roles = {
     preservation = {

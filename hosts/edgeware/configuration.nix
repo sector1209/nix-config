@@ -3,18 +3,11 @@
   secrets,
   ...
 }:
-let
-
-  hostname = "edgeware";
-
-in
 {
 
   imports = [
     ./hardware-configuration.nix
   ];
-
-  networking.hostName = hostname;
 
   roles = {
     preservation = {

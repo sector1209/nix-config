@@ -3,19 +3,12 @@
 {
   ...
 }:
-let
-
-  hostname = "nixos-testing";
-
-in
 {
 
   imports = [
     ./hardware-configuration.nix
     ./backup-testing.nix
   ];
-
-  networking.hostName = hostname;
 
   roles = {
 

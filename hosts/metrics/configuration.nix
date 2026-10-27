@@ -1,15 +1,10 @@
 {
   ...
 }:
-let
-  hostname = "metrics";
-in
 {
   imports = [
     ./hardware-configuration.nix
   ];
-
-  networking.hostName = hostname;
 
   roles = {
     proxmoxContainer.enable = true;

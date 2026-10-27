@@ -1,16 +1,11 @@
 {
   ...
 }:
-let
-  hostname = "technitium-dns";
-in
 {
 
   imports = [
     ./hardware-configuration.nix
   ];
-
-  networking.hostName = hostname;
 
   roles = {
     proxmoxContainer.enable = true;

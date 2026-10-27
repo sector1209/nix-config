@@ -3,18 +3,11 @@
   pkgs,
   ...
 }:
-let
-  hostname = "charlie";
-in
 {
 
   imports = [
     ./hardware-configuration.nix
   ];
-
-  networking.hostName = hostname;
-
-  ### Enable roles
 
   roles = {
 

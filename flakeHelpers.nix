@@ -49,6 +49,7 @@ in
       modules = [
         ./hosts/${machineHostName}/configuration.nix
         ./nixosRoles/default.nix
+        { networking.hostName = machineHostName; }
       ]
       ++ extraModules
       ++ nixpkgsVersion.lib.optionals (

@@ -1,16 +1,11 @@
 {
   ...
 }:
-let
-  hostname = "nixos-testing2";
-in
 {
 
   imports = [
     ./hardware-configuration.nix
   ];
-
-  networking.hostName = hostname;
 
   roles = {
     proxmoxContainer.enable = true;

@@ -1,16 +1,11 @@
 {
   ...
 }:
-let
-  hostname = "backupBox";
-in
 {
 
   imports = [
     ./hardware-configuration.nix
   ];
-
-  networking.hostName = hostname;
 
   roles = {
     proxmoxContainer = {

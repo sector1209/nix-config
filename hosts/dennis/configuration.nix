@@ -3,10 +3,7 @@
   ...
 }:
 let
-
-  hostname = "dennis";
   user = "dan";
-
 in
 {
 
@@ -14,8 +11,6 @@ in
     ./hardware-configuration.nix
     ./transfer.nix
   ];
-
-  networking.hostName = hostname;
 
   roles = {
     docker.enable = true;

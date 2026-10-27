@@ -15,8 +15,6 @@
   };
 
   config = lib.mkIf config.roles.vmSettings.enable {
-    #Provide a default hostname
-    networking.hostName = lib.mkDefault "base";
 
     # Enable QEMU Guest for Proxmox
     services.qemuGuest.enable = lib.mkDefault true;

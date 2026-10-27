@@ -2,9 +2,6 @@
   secrets,
   ...
 }:
-let
-  hostname = "mac";
-in
 {
 
   imports = [
@@ -13,8 +10,6 @@ in
     ./blog.nix
     ./logging.nix
   ];
-
-  networking.hostName = hostname;
 
   roles = {
     preservation = {
